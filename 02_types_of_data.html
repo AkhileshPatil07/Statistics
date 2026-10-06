@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>02 — Types of Data</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #FF6B35;
+  --primary-light: #FFF3EE;
+  --primary-dark: #E85520;
+  --bg: #F5F5F7;
+  --white: #FFFFFF;
+  --border: #E8E8EC;
+  --text: #1C1C1E;
+  --text-muted: #8E8E93;
+  --text-dim: #AEAEB2;
+  --hot: #FF3B30;
+  --warm: #FF9500;
+  --cold: #007AFF;
+  --success: #34C759;
+  --purple: #7B52FF;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* TOPBAR */
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  height: 58px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-logo {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--primary), #FF9A3C);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 14px; font-weight: 800;
+  box-shadow: 0 4px 12px rgba(255,107,53,0.3); flex-shrink: 0;
+}
+.brand-name { font-size: 15px; font-weight: 800; letter-spacing: -0.3px; }
+.brand-sub { font-size: 11px; color: var(--text-muted); font-weight: 400; margin-top: 1px; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 20px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+}
+.tag-orange { background: var(--primary-light); color: var(--primary); }
+.tag-blue   { background: #EEF5FF; color: var(--cold); }
+.tag-green  { background: #EDFAF1; color: var(--success); }
+.tag-purple { background: #F0EBFF; color: var(--purple); }
+
+/* HERO */
+.hero {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 40px 40px 36px;
+}
+.chapter-label {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--primary); margin-bottom: 10px;
+}
+.hero h1 {
+  font-size: 36px; font-weight: 800;
+  letter-spacing: -1px; line-height: 1.15; margin-bottom: 8px;
+}
+.hero h1 span { color: var(--primary); }
+.hero-sub {
+  font-size: 15px; color: var(--text-muted);
+  font-weight: 400; max-width: 700px; margin-bottom: 24px;
+}
+.hero-stats { display: flex; gap: 32px; }
+.hstat { display: flex; flex-direction: column; gap: 3px; }
+.hstat .val { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+.hstat .lbl { font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+.hstat:nth-child(1) .val { color: var(--primary); }
+.hstat:nth-child(2) .val { color: var(--cold); }
+.hstat:nth-child(3) .val { color: var(--success); }
+.hstat:nth-child(4) .val { color: var(--purple); }
+
+/* CONTENT */
+.content { padding: 36px 40px; max-width: 100%; }
+
+/* SECTION HEAD */
+.section-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 20px; margin-top: 52px;
+}
+.section-head:first-child { margin-top: 0; }
+.sec-num {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--primary), #FF9A3C);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 12px; font-weight: 800; flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(255,107,53,0.3);
+}
+.sec-title { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+
+/* CARD */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px; margin-bottom: 16px;
+}
+.card p { font-size: 14px; color: var(--text); font-weight: 400; line-height: 1.75; }
+.card p + p { margin-top: 10px; }
+
+/* DEF CARD */
+.def-card {
+  background: var(--text);
+  border-radius: 14px; padding: 24px 28px;
+  margin-bottom: 16px; position: relative; overflow: hidden;
+}
+.def-card::before {
+  content: 'KEY CONCEPT';
+  font-size: 9px; font-weight: 700; letter-spacing: 2.5px;
+  color: var(--primary); display: block; margin-bottom: 10px;
+}
+.def-card::after {
+  content: '< />';
+  position: absolute; right: 28px; top: 50%; transform: translateY(-50%);
+  font-size: 56px; font-weight: 800; color: rgba(255,255,255,0.04); pointer-events: none;
+}
+.def-card p { color: rgba(255,255,255,0.9) !important; font-size: 15px !important; font-weight: 500 !important; line-height: 1.7; }
+.def-card strong { color: #FF9A3C; }
+
+/* NOTE BAR */
+.note-bar {
+  border-left: 4px solid var(--primary);
+  background: var(--primary-light);
+  border-radius: 0 12px 12px 0;
+  padding: 14px 18px; margin-bottom: 16px;
+  font-size: 14px; font-weight: 500; color: var(--primary-dark); line-height: 1.65;
+}
+.note-bar.blue  { border-left-color: var(--cold);    background: #EEF5FF;  color: #005bb5; }
+.note-bar.green { border-left-color: var(--success); background: #EDFAF1;  color: #1a7a3a; }
+.note-bar.warm  { border-left-color: var(--warm);    background: #FFF8EE;  color: #8a5000; }
+.note-bar.purple{ border-left-color: var(--purple);  background: #F0EBFF;  color: #4a2fb5; }
+
+/* TWO BIG SPLIT CARDS */
+.split-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-bottom: 16px;
+}
+.split-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 24px;
+  border-top-width: 4px;
+}
+.split-card.left  { border-top-color: var(--cold);    }
+.split-card.right { border-top-color: var(--success); }
+.split-card.orange{ border-top-color: var(--primary); }
+.split-card.purple{ border-top-color: var(--purple);  }
+
+.split-type {
+  font-size: 9px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.split-card.left   .split-type { color: var(--cold);    }
+.split-card.right  .split-type { color: var(--success); }
+.split-card.orange .split-type { color: var(--primary); }
+.split-card.purple .split-type { color: var(--purple);  }
+
+.split-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.3px; }
+
+.split-card p  { font-size: 13px; color: var(--text-muted); line-height: 1.65; margin-bottom: 12px; }
+
+.eg-box {
+  background: var(--bg); border-radius: 8px; border: 1px solid var(--border);
+  padding: 12px 14px; font-size: 12px; color: var(--text); line-height: 1.55;
+}
+.eg-box strong { color: var(--primary); font-weight: 700; }
+.eg-box .eg-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 6px;
+}
+
+/* PILL LIST */
+.pill-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.pill {
+  display: inline-flex; padding: 4px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 700;
+  background: var(--bg); color: var(--text); border: 1px solid var(--border);
+}
+.pill.orange { background: var(--primary-light); color: var(--primary); border-color: rgba(255,107,53,0.2); }
+.pill.blue   { background: #EEF5FF; color: var(--cold);    border-color: rgba(0,122,255,0.2); }
+.pill.green  { background: #EDFAF1; color: var(--success); border-color: rgba(52,199,89,0.2); }
+.pill.purple { background: #F0EBFF; color: var(--purple);  border-color: rgba(123,82,255,0.2); }
+
+/* 4-SCALE GRID */
+.scale-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 14px; margin-bottom: 16px;
+}
+.scale-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 20px;
+  position: relative; overflow: hidden;
+}
+.scale-num {
+  font-size: 52px; font-weight: 800; position: absolute;
+  right: 12px; top: 8px; opacity: 0.04; line-height: 1; pointer-events: none;
+  color: var(--text);
+}
+.scale-badge {
+  display: inline-flex; padding: 4px 10px; border-radius: 20px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 12px;
+}
+.s1 .scale-badge { background: #FFF3EE; color: var(--primary); }
+.s2 .scale-badge { background: #FFF8EE; color: var(--warm); }
+.s3 .scale-badge { background: #EEF5FF; color: var(--cold); }
+.s4 .scale-badge { background: #EDFAF1; color: var(--success); }
+
+.s1 { border-top: 3px solid var(--primary); }
+.s2 { border-top: 3px solid var(--warm); }
+.s3 { border-top: 3px solid var(--cold); }
+.s4 { border-top: 3px solid var(--success); }
+
+.scale-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.2px; }
+.scale-card p  { font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-bottom: 10px; }
+
+.scale-prop {
+  background: var(--bg); border-radius: 8px; padding: 10px 12px;
+  border: 1px solid var(--border); margin-bottom: 8px;
+}
+.scale-prop .prop-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 6px;
+}
+.scale-prop .prop-rows { display: flex; flex-direction: column; gap: 3px; }
+.scale-prop .prop-row {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--text);
+}
+.prop-row .tick { font-size: 11px; }
+.tick.yes { color: var(--success); }
+.tick.no  { color: var(--hot); }
+
+.scale-eg { font-size: 11px; color: var(--text-muted); font-style: italic; line-height: 1.5; margin-top: 4px; }
+
+/* SCALE LADDER */
+.scale-ladder {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px; margin-bottom: 16px;
+}
+.ladder-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 20px;
+}
+.ladder {
+  display: flex; align-items: flex-end; gap: 0;
+  height: 90px; border-bottom: 2px solid var(--border);
+  margin-bottom: 12px;
+}
+.rung {
+  flex: 1; display: flex; align-items: flex-end;
+  justify-content: center; padding-bottom: 10px;
+}
+.rung-bar {
+  width: 100%; display: flex; align-items: flex-end;
+  justify-content: center; border-radius: 6px 6px 0 0;
+  font-size: 11px; font-weight: 700; color: white;
+  padding-bottom: 8px;
+}
+.rung:nth-child(1) .rung-bar { height: 30px; background: linear-gradient(180deg,#FFD0BB,var(--primary)); color: var(--primary-dark); font-size:10px; }
+.rung:nth-child(2) .rung-bar { height: 50px; background: linear-gradient(180deg,#FFE8BB,var(--warm)); color: #7a4a00; font-size:10px; }
+.rung:nth-child(3) .rung-bar { height: 70px; background: linear-gradient(180deg,#BDD9FF,var(--cold)); }
+.rung:nth-child(4) .rung-bar { height: 90px; background: linear-gradient(180deg,#B3F0C8,var(--success)); color: #0a4a20; }
+.ladder-labels {
+  display: flex; gap: 0;
+}
+.ll { flex: 1; text-align: center; font-size: 11px; font-weight: 700; color: var(--text-muted); }
+
+/* STRUCTURED / UNSTRUCTURED */
+.struct-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-bottom: 16px;
+}
+.struct-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 24px; border-top: 4px solid;
+}
+.struct-card.s { border-top-color: var(--cold); }
+.struct-card.u { border-top-color: var(--warm); }
+
+.struct-type { font-size: 9px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 8px; }
+.struct-card.s .struct-type { color: var(--cold); }
+.struct-card.u .struct-type { color: var(--warm); }
+
+.struct-card h3 { font-size: 17px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.3px; }
+.struct-card p  { font-size: 13px; color: var(--text-muted); line-height: 1.65; margin-bottom: 14px; }
+
+.struct-examples { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.se {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 6px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+}
+
+.tools-row {
+  background: var(--bg); border-radius: 8px; padding: 12px 14px;
+  border: 1px solid var(--border);
+}
+.tools-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+.tools-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.tool-tag {
+  padding: 3px 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 700; border: 1px solid;
+}
+.tool-tag.blue   { background: #EEF5FF; color: var(--cold);    border-color: rgba(0,122,255,0.2); }
+.tool-tag.orange { background: var(--primary-light); color: var(--primary); border-color: rgba(255,107,53,0.2); }
+.tool-tag.green  { background: #EDFAF1; color: var(--success); border-color: rgba(52,199,89,0.2); }
+.tool-tag.purple { background: #F0EBFF; color: var(--purple);  border-color: rgba(123,82,255,0.2); }
+
+/* PROJECT BLOCK */
+.project-block {
+  background: #0d1b2a; border-radius: 14px;
+  padding: 28px 32px; margin-bottom: 16px;
+  border: 1px solid #1e3a5a; position: relative; overflow: hidden;
+}
+.project-block::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--primary), #FF9A3C, var(--cold));
+}
+.proj-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 2.5px;
+  color: var(--primary); text-transform: uppercase; margin-bottom: 10px;
+}
+.project-block h3 { font-size: 16px; font-weight: 700; color: white; margin-bottom: 16px; letter-spacing: -0.2px; }
+.project-block p  { font-size: 13px; color: #8fb3cc; line-height: 1.7; margin-bottom: 8px; }
+.proj-result {
+  background: rgba(255,107,53,0.1); border: 1px solid rgba(255,107,53,0.25);
+  border-radius: 8px; padding: 10px 14px; margin-top: 16px;
+  font-size: 13px; color: #FF9A3C; font-weight: 600;
+}
+
+/* CUSTOMER TABLE */
+.table-wrap {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden; margin-bottom: 16px;
+}
+.table-head-bar {
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text-dim);
+  background: var(--bg);
+}
+table { width: 100%; border-collapse: collapse; }
+th {
+  text-align: left; padding: 11px 16px;
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-dim); background: var(--bg); border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 13px 16px; font-size: 13px;
+  border-bottom: 1px solid var(--border); vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #FAFAFA; }
+.td-main { font-weight: 700; }
+.td-sub  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+.dt-badge {
+  display: inline-flex; padding: 4px 10px;
+  border-radius: 8px; font-size: 11px; font-weight: 700;
+}
+.dt-nominal   { background: #FFF3EE; color: var(--primary); }
+.dt-ordinal   { background: #FFF8EE; color: var(--warm); }
+.dt-interval  { background: #EEF5FF; color: var(--cold); }
+.dt-ratio     { background: #EDFAF1; color: var(--success); }
+.dt-discrete  { background: #F0EBFF; color: var(--purple); }
+.dt-continuous{ background: #FFF0EE; color: var(--hot); }
+
+/* INSIGHT */
+.insight {
+  display: flex; align-items: flex-start; gap: 14px;
+  background: #FFF8EE; border: 1.5px solid #FFD9A0;
+  border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;
+}
+.insight-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+.insight p { font-size: 14px; color: #7a4a00; font-weight: 500; line-height: 1.65; }
+
+/* WRONG RIGHT */
+.wr-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; margin-bottom: 16px;
+}
+.wr-card {
+  border-radius: 12px; padding: 18px 20px;
+}
+.wr-card.wrong { background: #FFF0EE; border: 1.5px solid rgba(255,59,48,0.2); }
+.wr-card.right { background: #EDFAF1; border: 1.5px solid rgba(52,199,89,0.2); }
+.wr-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.wr-card.wrong .wr-label { color: var(--hot); }
+.wr-card.right .wr-label { color: var(--success); }
+.wr-card p { font-size: 13px; line-height: 1.6; }
+.wr-card.wrong p { color: #8a1a10; }
+.wr-card.right p { color: #0a4a20; }
+
+/* PROJ COLUMNS */
+.proj-row {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px; margin-top: 16px;
+}
+.proj-col-title {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 8px;
+  padding: 5px 10px; border-radius: 6px; display: inline-block;
+}
+.col-q   { background: rgba(255,107,53,0.15); color: #FF9A3C; }
+.col-i   { background: rgba(52,199,89,0.15);  color: #34C759; }
+.col-u   { background: rgba(0,122,255,0.15);  color: #58a9ff; }
+.proj-point {
+  font-size: 13px; color: #a8c8e0;
+  padding: 5px 0; padding-left: 16px;
+  position: relative; line-height: 1.55; margin-bottom: 4px;
+}
+.proj-point::before {
+  content: '→'; position: absolute; left: 0;
+  color: var(--primary); font-weight: 700;
+}
+
+/* SUMMARY */
+.summary {
+  background: var(--text); border-radius: 16px;
+  padding: 28px 32px; margin-top: 52px;
+}
+.summary-head {
+  font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--primary); margin-bottom: 16px;
+}
+.summary h2 { font-size: 20px; font-weight: 800; color: white; letter-spacing: -0.5px; margin-bottom: 20px; }
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sum-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 12px 14px;
+}
+.sum-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--primary); flex-shrink: 0; margin-top: 6px;
+}
+.sum-item p { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.55; }
+.sum-item p strong { color: white; font-weight: 600; }
+.next-topic {
+  margin-top: 20px; padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.next-topic p { font-size: 12px; color: rgba(255,255,255,0.4); }
+.next-btn {
+  background: var(--primary); color: white;
+  padding: 8px 18px; border-radius: 20px;
+  font-size: 12px; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; box-shadow: 0 4px 12px rgba(255,107,53,0.35);
+}
+
+@media (max-width: 960px) {
+  .scale-grid { grid-template-columns: repeat(2,1fr); }
+  .proj-row   { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+  .split-grid, .struct-grid, .wr-grid, .summary-grid { grid-template-columns: 1fr; }
+  .scale-grid, .proj-row { grid-template-columns: 1fr 1fr; }
+  .hero h1 { font-size: 26px; }
+  .content, .hero, .topbar { padding-left: 20px; padding-right: 20px; }
+}
+@media (max-width: 480px) {
+  .scale-grid, .proj-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-logo">DS</div>
+    <div>
+      <div class="brand-name">DataScience Notes</div>
+      <div class="brand-sub">Statistics Series — by a 20yr DS Pro</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="tag tag-orange">Topic 02 / N</span>
+    <span class="tag tag-blue">Foundation</span>
+    <span class="tag tag-green">~18 min</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="chapter-label">Chapter 02 · Statistics Series</div>
+  <h1>Types of <span>Data</span></h1>
+  <div class="hero-sub">You can't analyze data you don't understand. Before touching any formula or model — know what type of data you're dealing with. Everything flows from this.</div>
+  <div class="hero-stats">
+    <div class="hstat"><div class="val">4</div><div class="lbl">Big Categories</div></div>
+    <div class="hstat"><div class="val">4</div><div class="lbl">Measurement Scales</div></div>
+    <div class="hstat"><div class="val">2</div><div class="lbl">Real Projects</div></div>
+    <div class="hstat"><div class="val">1</div><div class="lbl">Mistake to Avoid</div></div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- §1 WHY CARE -->
+  <div class="section-head">
+    <div class="sec-num">§1</div>
+    <div class="sec-title">Why Does Data Type Matter?</div>
+  </div>
+
+  <div class="card">
+    <p>I've seen this mistake a hundred times in my career — a junior DS calculates the <strong>mean of a rating column</strong> (like "customer satisfaction: 1 to 5"), presents it in a report, and the entire conclusion is wrong. Not because the math was wrong — but because you can't take a mean of ordinal data.</p>
+    <p>Data type determines <strong>which operations are valid, which statistics you can calculate, and which models you can use.</strong> Get this wrong, and everything downstream is garbage — even if your code runs perfectly.</p>
+  </div>
+
+  <div class="def-card">
+    <p>Every data point in your dataset has a <strong>type</strong>. That type is not just a technical label — it's a contract that tells you <strong>what you're allowed to do with it mathematically.</strong> Violate that contract and your analysis is invalid.</p>
+  </div>
+
+  <div class="wr-grid">
+    <div class="wr-card wrong">
+      <div class="wr-label">❌ Wrong Approach</div>
+      <p>Calculate the average of "City" column (Mumbai=1, Delhi=2, Bangalore=3). "Average city = 1.8" — this means absolutely nothing. City is nominal data. Averaging it is mathematically meaningless.</p>
+    </div>
+    <div class="wr-card right">
+      <div class="wr-label">✅ Right Approach</div>
+      <p>For nominal data like "City", use Mode (most frequent value) or count frequencies. "Mumbai appears 45% of the time" — now that's a valid, meaningful stat.</p>
+    </div>
+  </div>
+
+  <!-- §2 QUALITATIVE VS QUANTITATIVE -->
+  <div class="section-head">
+    <div class="sec-num">§2</div>
+    <div class="sec-title">Qualitative vs Quantitative</div>
+  </div>
+
+  <div class="card">
+    <p>This is the first and most fundamental split. Every column in every dataset you will ever work with is either <strong>Qualitative</strong> (describes quality/category) or <strong>Quantitative</strong> (describes quantity/number). Master this split first — everything else builds on top of it.</p>
+  </div>
+
+  <div class="split-grid">
+    <div class="split-card left">
+      <div class="split-type">Type A</div>
+      <h3>🏷️ Qualitative Data</h3>
+      <p>Also called <strong>Categorical data</strong>. It describes qualities or characteristics — things that fall into <em>categories</em>, not numbers. You can't do arithmetic on it (no adding, subtracting, averaging).</p>
+      <p><strong>Ask yourself:</strong> "Does it make sense to add two of these together?" If no → it's qualitative.</p>
+      <div class="pill-list">
+        <span class="pill blue">Gender</span>
+        <span class="pill blue">City</span>
+        <span class="pill blue">Blood Group</span>
+        <span class="pill blue">Product Category</span>
+        <span class="pill blue">Customer Feedback</span>
+        <span class="pill blue">Yes / No</span>
+      </div>
+      <div class="eg-box">
+        <div class="eg-label">DS Context</div>
+        <strong>E-commerce:</strong> Product category (Electronics, Clothing, Books). You can count how many products are in each category. You can find the most popular category. But "Electronics + Books = ?" makes no sense.
+      </div>
+    </div>
+    <div class="split-card right">
+      <div class="split-type">Type B</div>
+      <h3>🔢 Quantitative Data</h3>
+      <p>Also called <strong>Numerical data</strong>. It's data that represents actual measurable quantities — things you can count, add, subtract, average. The arithmetic is meaningful here.</p>
+      <p><strong>Ask yourself:</strong> "Does adding two of these together make sense?" If yes → it's quantitative.</p>
+      <div class="pill-list">
+        <span class="pill green">Age</span>
+        <span class="pill green">Salary</span>
+        <span class="pill green">Temperature</span>
+        <span class="pill green">Number of Orders</span>
+        <span class="pill green">Revenue</span>
+        <span class="pill green">Height / Weight</span>
+      </div>
+      <div class="eg-box">
+        <div class="eg-label">DS Context</div>
+        <strong>Banking:</strong> Customer age (32 years), income (₹8.5L/yr), loan amount (₹50L). You can average these, find distribution, calculate correlations. Age 30 + Age 40 / 2 = Average age 35 → perfectly valid.
+      </div>
+    </div>
+  </div>
+
+  <!-- §3 DISCRETE VS CONTINUOUS -->
+  <div class="section-head">
+    <div class="sec-num">§3</div>
+    <div class="sec-title">Discrete vs Continuous</div>
+  </div>
+
+  <div class="card">
+    <p>This is the sub-split inside Quantitative data. Once you know something is a number — the next question is: <em>can it take any value in a range, or only specific fixed values?</em> This distinction matters for which probability distributions you use and how you visualize the data.</p>
+  </div>
+
+  <div class="split-grid">
+    <div class="split-card orange">
+      <div class="split-type">Quantitative Sub-type A</div>
+      <h3>🎲 Discrete Data</h3>
+      <p>Data that can only take <strong>specific, separate, countable values</strong>. Usually whole numbers. You can count them — and there are clear "gaps" between possible values. You can't have 2.5 children.</p>
+      <p><strong>Key test:</strong> Can the value be a fraction in real life? If no → Discrete.</p>
+      <div class="pill-list">
+        <span class="pill orange">No. of children</span>
+        <span class="pill orange">No. of orders placed</span>
+        <span class="pill orange">No. of employees</span>
+        <span class="pill orange">Dice roll (1–6)</span>
+        <span class="pill orange">No. of complaints</span>
+      </div>
+      <div class="eg-box">
+        <div class="eg-label">Real Project Example</div>
+        <strong>Telecom:</strong> Number of customer support calls per month. It's 0, 1, 2, 3... never 1.7 calls. We used a <strong>Poisson distribution</strong> to model this — a distribution designed specifically for discrete count data.
+      </div>
+    </div>
+    <div class="split-card purple">
+      <div class="split-type">Quantitative Sub-type B</div>
+      <h3>📈 Continuous Data</h3>
+      <p>Data that can take <strong>any value within a range</strong>, including fractions and decimals. Measured, not counted. The precision depends only on your measuring instrument.</p>
+      <p><strong>Key test:</strong> Can this value theoretically be measured more precisely? If yes → Continuous.</p>
+      <div class="pill-list">
+        <span class="pill purple">Age (exact)</span>
+        <span class="pill purple">Temperature</span>
+        <span class="pill purple">Revenue (₹)</span>
+        <span class="pill purple">Weight / Height</span>
+        <span class="pill purple">Time spent on app</span>
+      </div>
+      <div class="eg-box">
+        <div class="eg-label">Real Project Example</div>
+        <strong>Healthcare:</strong> Patient blood pressure (122.4 mmHg), body temperature (98.6°F), response time to drug (4.32 hours). All continuous — we used <strong>Normal distribution</strong> and regression models, which require continuous targets.
+      </div>
+    </div>
+  </div>
+
+  <div class="note-bar blue">
+    💡 <strong>Quick memory trick:</strong> Discrete = you can count on your fingers (1, 2, 3...). Continuous = you need a ruler or scale to measure it, and you can always go one decimal place further.
+  </div>
+
+  <!-- §4 SCALES OF MEASUREMENT -->
+  <div class="section-head">
+    <div class="sec-num">§4</div>
+    <div class="sec-title">Scales of Measurement — The 4 Levels</div>
+  </div>
+
+  <div class="card">
+    <p>This is where most people get confused — and where understanding really separates a mediocre DS from a great one. There are <strong>4 levels of measurement</strong>, each more powerful than the previous. Higher level = more mathematical operations allowed. The levels are cumulative — each one adds a new property on top of the previous.</p>
+  </div>
+
+  <!-- Ladder visual -->
+  <div class="scale-ladder">
+    <div class="ladder-title">Power Ladder — Each Level Adds More Capability</div>
+    <div class="ladder">
+      <div class="rung"><div class="rung-bar">Nominal</div></div>
+      <div class="rung"><div class="rung-bar">Ordinal</div></div>
+      <div class="rung"><div class="rung-bar">Interval</div></div>
+      <div class="rung"><div class="rung-bar">Ratio</div></div>
+    </div>
+    <div class="ladder-labels">
+      <div class="ll">Weakest</div>
+      <div class="ll">↑ More power</div>
+      <div class="ll">↑ More power</div>
+      <div class="ll">Strongest</div>
+    </div>
+  </div>
+
+  <div class="scale-grid">
+    <!-- NOMINAL -->
+    <div class="scale-card s1">
+      <div class="scale-num">1</div>
+      <div class="scale-badge">Level 1 · Nominal</div>
+      <h3>Named Categories</h3>
+      <p>Data is just labels or names. No order, no ranking, no math. Just different buckets. Think of it as <em>stickers on boxes</em> — they identify, nothing more.</p>
+      <div class="scale-prop">
+        <div class="prop-label">Properties</div>
+        <div class="prop-rows">
+          <div class="prop-row"><span class="tick yes">✓</span> Can categorize</div>
+          <div class="prop-row"><span class="tick no">✗</span> Can rank/order</div>
+          <div class="prop-row"><span class="tick no">✗</span> Meaningful difference</div>
+          <div class="prop-row"><span class="tick no">✗</span> True zero point</div>
+        </div>
+      </div>
+      <div class="scale-eg">📌 Gender (M/F), Blood group (A, B, O, AB), Eye color, City name, Payment method (Cash/Card/UPI)</div>
+    </div>
+
+    <!-- ORDINAL -->
+    <div class="scale-card s2">
+      <div class="scale-num">2</div>
+      <div class="scale-badge">Level 2 · Ordinal</div>
+      <h3>Ranked Order</h3>
+      <p>Data has a meaningful order/rank — but the <em>gaps between ranks are not equal</em>. You know 1st is better than 2nd, but not by how much exactly.</p>
+      <div class="scale-prop">
+        <div class="prop-label">Properties</div>
+        <div class="prop-rows">
+          <div class="prop-row"><span class="tick yes">✓</span> Can categorize</div>
+          <div class="prop-row"><span class="tick yes">✓</span> Can rank/order</div>
+          <div class="prop-row"><span class="tick no">✗</span> Meaningful difference</div>
+          <div class="prop-row"><span class="tick no">✗</span> True zero point</div>
+        </div>
+      </div>
+      <div class="scale-eg">📌 Customer satisfaction (1–5 stars), Education level (High school → UG → PG → PhD), Movie rating (Bad/Avg/Good/Excellent), T-shirt size (S/M/L/XL)</div>
+    </div>
+
+    <!-- INTERVAL -->
+    <div class="scale-card s3">
+      <div class="scale-num">3</div>
+      <div class="scale-badge">Level 3 · Interval</div>
+      <h3>Equal Gaps, No True Zero</h3>
+      <p>Has all ordinal properties + the differences between values are <em>meaningful and equal</em>. But <strong>zero doesn't mean "absence"</strong> — it's just another point on the scale.</p>
+      <div class="scale-prop">
+        <div class="prop-label">Properties</div>
+        <div class="prop-rows">
+          <div class="prop-row"><span class="tick yes">✓</span> Can categorize</div>
+          <div class="prop-row"><span class="tick yes">✓</span> Can rank/order</div>
+          <div class="prop-row"><span class="tick yes">✓</span> Meaningful difference</div>
+          <div class="prop-row"><span class="tick no">✗</span> True zero point</div>
+        </div>
+      </div>
+      <div class="scale-eg">📌 Temperature in °C/°F (0°C ≠ "no temperature"), Calendar year (Year 0 doesn't mean "no time"), IQ score, Credit score range</div>
+    </div>
+
+    <!-- RATIO -->
+    <div class="scale-card s4">
+      <div class="scale-num">4</div>
+      <div class="scale-badge">Level 4 · Ratio</div>
+      <h3>The Full Package</h3>
+      <p>Has everything — order, equal intervals, <em>and a true meaningful zero</em>. Zero actually means "none/absence". Ratios between values are meaningful: "twice as much" makes sense.</p>
+      <div class="scale-prop">
+        <div class="prop-label">Properties</div>
+        <div class="prop-rows">
+          <div class="prop-row"><span class="tick yes">✓</span> Can categorize</div>
+          <div class="prop-row"><span class="tick yes">✓</span> Can rank/order</div>
+          <div class="prop-row"><span class="tick yes">✓</span> Meaningful difference</div>
+          <div class="prop-row"><span class="tick yes">✓</span> True zero point</div>
+        </div>
+      </div>
+      <div class="scale-eg">📌 Age (0 = just born), Salary (₹0 = no income), Height, Weight, Revenue, Number of orders, Distance, Time duration</div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-icon">💡</div>
+    <p><strong>The temperature trap (most common interview question):</strong> Temperature in Celsius is Interval, NOT Ratio. Why? Because 0°C doesn't mean "no temperature" — it just means the freezing point of water. So saying "40°C is twice as hot as 20°C" is mathematically wrong. But 0 kg of weight = literally no weight → that's Ratio. <strong>True zero = physical absence of the thing.</strong></p>
+  </div>
+
+  <!-- Customer data table -->
+  <div class="table-wrap">
+    <div class="table-head-bar">Real Example — E-Commerce Customer Dataset: Identifying Data Types</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Column Name</th>
+          <th>Sample Values</th>
+          <th>Qual / Quant</th>
+          <th>Scale Type</th>
+          <th>Why?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="td-main">Customer ID</div></td>
+          <td>C001, C002, C003</td>
+          <td><span class="dt-badge dt-nominal">Qualitative</span></td>
+          <td><span class="dt-badge dt-nominal">Nominal</span></td>
+          <td style="font-size:12px; color:var(--text-muted);">Just a label. Adding C001 + C002 makes no sense.</td>
+        </tr>
+        <tr>
+          <td><div class="td-main">City</div></td>
+          <td>Mumbai, Delhi, Pune</td>
+          <td><span class="dt-badge dt-nominal">Qualitative</span></td>
+          <td><span class="dt-badge dt-nominal">Nominal</span></td>
+          <td style="font-size:12px; color:var(--text-muted);">No order. Mumbai isn't "better than" Delhi.</td>
+        </tr>
+        <tr>
+          <td><div class="td-main">Satisfaction Rating</div></td>
+          <td>1★, 2★, 3★, 4★, 5★</td>
+          <td><span class="dt-badge dt-ordinal">Qualitative</span></td>
+          <td><span class="dt-badge dt-ordinal">Ordinal</span></td>
+          <td style="font-size:12px; color:var(--text-muted);">Has order but gap between 3★ and 4★ isn't necessarily equal to 4★ and 5★.</td>
+        </tr>
+        <tr>
+          <td><div class="td-main">Account Created Year</div></td>
+          <td>2019, 2020, 2021</td>
+          <td><span class="dt-badge dt-interval">Quantitative</span></td>
+          <td><span class="dt-badge dt-interval">Interval</span></td>
+          <td style="font-size:12px; color:var(--text-muted);">Year 0 doesn't mean "no time." Differences are equal (1 year gap) but no true zero.</td>
+        </tr>
+        <tr>
+          <td><div class="td-main">Customer Age</div></td>
+          <td>24, 35, 42, 58</td>
+          <td><span class="dt-badge dt-ratio">Quantitative</span></td>
+          <td><span class="dt-badge dt-ratio">Ratio</span></td>
+          <td style="font-size:12px; color:var(--text-muted);">Age 0 = just born (true zero). 40yr is twice 20yr — ratio makes sense.</td>
+        </tr>
+        <tr>
+          <td><div class="td-main">Total Orders Placed</div></td>
+          <td>0, 1, 5, 12, 47</td>
+          <td><span class="dt-badge dt-discrete">Quantitative</span></td>
+          <td><span class="dt-badge dt-ratio">Ratio + Discrete</span></td>
+          <td style="font-size:12px; color:var(--text-muted);">0 orders = truly no orders. Only whole numbers (discrete). 10 orders = twice 5 orders.</td>
+        </tr>
+        <tr>
+          <td><div class="td-main">Total Revenue (₹)</div></td>
+          <td>₹0, ₹450.75, ₹12,340</td>
+          <td><span class="dt-badge dt-continuous">Quantitative</span></td>
+          <td><span class="dt-badge dt-ratio">Ratio + Continuous</span></td>
+          <td style="font-size:12px; color:var(--text-muted);">₹0 = no revenue at all. Can be fractional. ₹1000 is truly twice ₹500.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- §5 STRUCTURED VS UNSTRUCTURED -->
+  <div class="section-head">
+    <div class="sec-num">§5</div>
+    <div class="sec-title">Structured vs Unstructured Data</div>
+  </div>
+
+  <div class="card">
+    <p>This is the modern DS reality check. The types above (nominal, ratio, etc.) all live inside <strong>structured data</strong> — clean tables, rows, columns. But in the real world, <strong>80% of all data generated is unstructured</strong>. As a DS, you need to know the difference and know which tools handle each.</p>
+  </div>
+
+  <div class="struct-grid">
+    <div class="struct-card s">
+      <div class="struct-type">Type 01</div>
+      <h3>🗄️ Structured Data</h3>
+      <p>Organized in a predefined format — rows and columns, like a spreadsheet or SQL table. Each cell has a defined data type. Easy to store, query, and analyze. This is what classical statistics was built for.</p>
+      <div class="struct-examples">
+        <div class="se">📊 SQL Databases</div>
+        <div class="se">📋 Excel / CSV files</div>
+        <div class="se">📱 CRM records</div>
+        <div class="se">💳 Transaction logs</div>
+        <div class="se">📦 Inventory tables</div>
+      </div>
+      <div class="tools-row">
+        <div class="tools-label">Tools Used</div>
+        <div class="tools-list">
+          <span class="tool-tag blue">SQL</span>
+          <span class="tool-tag blue">Pandas</span>
+          <span class="tool-tag blue">Excel</span>
+          <span class="tool-tag green">Tableau</span>
+          <span class="tool-tag green">Power BI</span>
+        </div>
+      </div>
+    </div>
+    <div class="struct-card u">
+      <div class="struct-type">Type 02</div>
+      <h3>📁 Unstructured Data</h3>
+      <p>No predefined format. It's raw, messy, and requires heavy processing before analysis. Think emails, images, audio, social media posts, PDFs. Can't just dump this in a table and run a SQL query.</p>
+      <div class="struct-examples">
+        <div class="se">💬 Customer reviews (text)</div>
+        <div class="se">🖼️ Product images</div>
+        <div class="se">🎵 Audio recordings</div>
+        <div class="se">📧 Emails / Chats</div>
+        <div class="se">📹 CCTV footage</div>
+      </div>
+      <div class="tools-row">
+        <div class="tools-label">Tools Used</div>
+        <div class="tools-list">
+          <span class="tool-tag orange">NLP / spaCy</span>
+          <span class="tool-tag orange">BERT / GPT</span>
+          <span class="tool-tag purple">OpenCV</span>
+          <span class="tool-tag purple">PyTorch</span>
+          <span class="tool-tag green">Whisper</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note-bar purple">
+    🚀 <strong>Semi-structured data also exists</strong> — JSON, XML, logs, HTML. It has some structure (key-value pairs) but isn't a clean table. REST API responses are semi-structured. You'll deal with this a lot in real projects. Tools: <strong>Python (json module), MongoDB, Spark</strong>.
+  </div>
+
+  <!-- §6 REAL PROJECT -->
+  <div class="section-head">
+    <div class="sec-num">§6</div>
+    <div class="sec-title">Real Project — All Data Types in One</div>
+  </div>
+
+  <div class="project-block">
+    <div class="proj-label">⚡ Real Project · Customer Churn Prediction · Telecom</div>
+    <h3>Airtel-Style Telecom Churn Model — Predicting Who Will Leave Next Month</h3>
+    <p>A telecom client with 4 million subscribers. Task: predict which customers will cancel their subscription in the next 30 days. This single project used every type of data we just covered.</p>
+    <div class="proj-row">
+      <div>
+        <div class="proj-col-title col-q">Qualitative Data Used</div>
+        <div class="proj-point">Plan type (Prepaid/Postpaid) → <strong>Nominal</strong></div>
+        <div class="proj-point">Customer satisfaction survey (1–5) → <strong>Ordinal</strong></div>
+        <div class="proj-point">Region (North/South/East/West) → <strong>Nominal</strong></div>
+        <div class="proj-point">Complaint category (Network/Billing/Service) → <strong>Nominal</strong></div>
+      </div>
+      <div>
+        <div class="proj-col-title col-i">Quantitative Data Used</div>
+        <div class="proj-point">Customer age → <strong>Ratio</strong> (continuous)</div>
+        <div class="proj-point">Monthly bill amount → <strong>Ratio</strong> (continuous)</div>
+        <div class="proj-point">Number of support calls → <strong>Ratio</strong> (discrete)</div>
+        <div class="proj-point">Account activation year → <strong>Interval</strong></div>
+      </div>
+      <div>
+        <div class="proj-col-title col-u">Unstructured Data Used</div>
+        <div class="proj-point">Customer complaint text → <strong>NLP sentiment</strong> extracted</div>
+        <div class="proj-point">Call center transcripts → <strong>Topic modeling</strong> applied</div>
+        <div class="proj-point">Complaint emails → Converted to structured features</div>
+        <div class="proj-point">App reviews → Sentiment score (−1 to +1)</div>
+      </div>
+    </div>
+    <div class="proj-result">
+      💡 Key insight: The <strong>satisfaction rating (ordinal)</strong> was the strongest predictor — but only after we treated it correctly as ordinal, not as a ratio. Treating it as ratio (and averaging it) gave a weaker model. Knowing data types = better model. We achieved 87% recall on churners — reduced monthly churn by 19%.
+    </div>
+  </div>
+
+  <!-- QUICK REF -->
+  <div class="section-head">
+    <div class="sec-num">§7</div>
+    <div class="sec-title">Quick Reference — What Can You Do with Each Type?</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Scale</th>
+          <th>Mode</th>
+          <th>Median</th>
+          <th>Mean</th>
+          <th>Add / Subtract</th>
+          <th>Multiply / Divide</th>
+          <th>Best for...</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="dt-badge dt-nominal">Nominal</span></td>
+          <td style="color:var(--success); font-weight:700;">✓</td>
+          <td style="color:var(--hot); font-weight:700;">✗</td>
+          <td style="color:var(--hot); font-weight:700;">✗</td>
+          <td style="color:var(--hot); font-weight:700;">✗</td>
+          <td style="color:var(--hot); font-weight:700;">✗</td>
+          <td style="font-size:12px; color:var(--text-muted);">Frequency counts, Chi-square, bar charts</td>
+        </tr>
+        <tr>
+          <td><span class="dt-badge dt-ordinal">Ordinal</span></td>
+          <td style="color:var(--success); font-weight:700;">✓</td>
+          <td style="color:var(--success); font-weight:700;">✓</td>
+          <td style="color:var(--hot); font-weight:700;">✗</td>
+          <td style="color:var(--hot); font-weight:700;">✗</td>
+          <td style="color:var(--hot); font-weight:700;">✗</td>
+          <td style="font-size:12px; color:var(--text-muted);">Rank correlation, Median, box plots</td>
+        </tr>
+        <tr>
+          <td><span class="dt-badge dt-interval">Interval</span></td>
+          <td style="color:var(--success); font-weight:700;">✓</td>
+          <td style="color:var(--success); font-weight:700;">✓</td>
+          <td style="color:var(--success); font-weight:700;">✓</td>
+          <td style="color:var(--success); font-weight:700;">✓</td>
+          <td style="color:var(--hot); font-weight:700;">✗</td>
+          <td style="font-size:12px; color:var(--text-muted);">t-tests, mean, SD, histograms</td>
+        </tr>
+        <tr>
+          <td><span class="dt-badge dt-ratio">Ratio</span></td>
+          <td style="color:var(--success); font-weight:700;">✓</td>
+          <td style="color:var(--success); font-weight:700;">✓</td>
+          <td style="color:var(--success); font-weight:700;">✓</td>
+          <td style="color:var(--success); font-weight:700;">✓</td>
+          <td style="color:var(--success); font-weight:700;">✓</td>
+          <td style="font-size:12px; color:var(--text-muted);">All operations, regression, all ML models</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note-bar warm">
+    ⚡ <strong>Interview tip from 20 years of hiring DS candidates:</strong> "Is temperature a ratio or interval scale?" — I've asked this in 100+ interviews. Most people say ratio. The correct answer is Interval (in °C/°F). If you know this and explain the true-zero concept clearly, you immediately stand out. It shows you actually understand the math, not just the vocabulary.
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary">
+    <div class="summary-head">Chapter Summary</div>
+    <h2>What you must take away from this chapter ↓</h2>
+    <div class="summary-grid">
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>Data type = what operations are valid.</strong> Get the type wrong → your statistics and models are wrong, even if the code runs perfectly.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>Qualitative = categories (no math). Quantitative = numbers (math is valid).</strong> First split to make before anything else.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>Discrete = countable, whole values. Continuous = any value in range.</strong> This decides which probability distribution to use.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>4 scales: Nominal → Ordinal → Interval → Ratio.</strong> Each level adds one more mathematical superpower. Ratio is the most powerful.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>True zero test = the key to Ratio.</strong> Zero must mean "complete absence" of the thing. Temperature in °C fails this. Age, revenue, weight pass it.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>80% of real-world data is unstructured.</strong> Text, images, audio — these need NLP and deep learning before they become analyzable structured data.</p>
+      </div>
+    </div>
+    <div class="next-topic">
+      <p>Completed: Chapter 02 · Types of Data</p>
+      <div class="next-btn">Next: Measures of Central Tendency →</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
