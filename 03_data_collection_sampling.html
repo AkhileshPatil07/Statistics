@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>03 — Data Collection & Sampling</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #FF6B35;
+  --primary-light: #FFF3EE;
+  --primary-dark: #E85520;
+  --bg: #F5F5F7;
+  --white: #FFFFFF;
+  --border: #E8E8EC;
+  --text: #1C1C1E;
+  --text-muted: #8E8E93;
+  --text-dim: #AEAEB2;
+  --hot: #FF3B30;
+  --warm: #FF9500;
+  --cold: #007AFF;
+  --success: #34C759;
+  --purple: #7B52FF;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  height: 62px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-logo {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--primary), #FF9A3C);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 15px; font-weight: 800;
+  box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+}
+.brand-name { font-size: 16px; font-weight: 800; letter-spacing: -0.3px; }
+.brand-sub  { font-size: 12px; color: var(--text-muted); font-weight: 400; margin-top: 1px; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.tag {
+  display: inline-flex; align-items: center;
+  padding: 5px 13px; border-radius: 20px;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
+}
+.tag-orange { background: var(--primary-light); color: var(--primary); }
+.tag-blue   { background: #EEF5FF; color: var(--cold); }
+.tag-green  { background: #EDFAF1; color: var(--success); }
+
+/* ── HERO ── */
+.hero {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 44px 40px 38px;
+}
+.chapter-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--primary); margin-bottom: 10px;
+}
+.hero h1 {
+  font-size: 40px; font-weight: 800;
+  letter-spacing: -1.2px; line-height: 1.15; margin-bottom: 10px;
+}
+.hero h1 span { color: var(--primary); }
+.hero-sub {
+  font-size: 16px; color: var(--text-muted);
+  font-weight: 400; max-width: 720px; margin-bottom: 26px; line-height: 1.6;
+}
+.hero-stats { display: flex; gap: 36px; flex-wrap: wrap; }
+.hstat { display: flex; flex-direction: column; gap: 3px; }
+.hstat .val { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+.hstat .lbl { font-size: 12px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+.hstat:nth-child(1) .val { color: var(--primary); }
+.hstat:nth-child(2) .val { color: var(--cold); }
+.hstat:nth-child(3) .val { color: var(--success); }
+.hstat:nth-child(4) .val { color: var(--purple); }
+
+/* ── CONTENT ── */
+.content { padding: 40px 40px; max-width: 100%; }
+
+/* ── SECTION HEAD ── */
+.section-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 22px; margin-top: 56px;
+}
+.section-head:first-child { margin-top: 0; }
+.sec-num {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--primary), #FF9A3C);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 13px; font-weight: 800; flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(255,107,53,0.3);
+}
+.sec-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+
+/* ── CARD ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 26px; margin-bottom: 16px;
+}
+.card p { font-size: 15px; color: var(--text); font-weight: 400; line-height: 1.8; }
+.card p + p { margin-top: 12px; }
+
+/* ── DEF CARD ── */
+.def-card {
+  background: var(--text); border-radius: 14px;
+  padding: 26px 30px; margin-bottom: 16px; position: relative; overflow: hidden;
+}
+.def-card::before {
+  content: 'KEY CONCEPT';
+  font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+  color: var(--primary); display: block; margin-bottom: 10px;
+}
+.def-card p {
+  color: rgba(255,255,255,0.92) !important;
+  font-size: 16px !important; font-weight: 500 !important; line-height: 1.75;
+}
+.def-card strong { color: #FF9A3C; }
+
+/* ── NOTE BAR ── */
+.note-bar {
+  border-left: 4px solid var(--primary);
+  background: var(--primary-light);
+  border-radius: 0 12px 12px 0;
+  padding: 15px 20px; margin-bottom: 16px;
+  font-size: 15px; font-weight: 500; color: var(--primary-dark); line-height: 1.7;
+}
+.note-bar.blue   { border-left-color: var(--cold);    background: #EEF5FF;  color: #004fa0; }
+.note-bar.green  { border-left-color: var(--success); background: #EDFAF1;  color: #155a2a; }
+.note-bar.warm   { border-left-color: var(--warm);    background: #FFF8EE;  color: #7a4800; }
+.note-bar.purple { border-left-color: var(--purple);  background: #F0EBFF;  color: #3d1fa8; }
+.note-bar.red    { border-left-color: var(--hot);     background: #FFF0EE;  color: #8a1400; }
+
+/* ── SPLIT 2-COL ── */
+.split-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-bottom: 16px;
+}
+.split-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 24px; border-top: 4px solid;
+}
+.split-card.blue   { border-top-color: var(--cold); }
+.split-card.orange { border-top-color: var(--primary); }
+.split-card.green  { border-top-color: var(--success); }
+.split-card.purple { border-top-color: var(--purple); }
+.split-card.warm   { border-top-color: var(--warm); }
+
+.split-type {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.split-card.blue   .split-type { color: var(--cold); }
+.split-card.orange .split-type { color: var(--primary); }
+.split-card.green  .split-type { color: var(--success); }
+.split-card.purple .split-type { color: var(--purple); }
+.split-card.warm   .split-type { color: var(--warm); }
+
+.split-card h3 { font-size: 19px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.3px; }
+.split-card p  { font-size: 14px; color: var(--text-muted); line-height: 1.75; margin-bottom: 14px; }
+.split-card strong { color: var(--text); }
+
+/* ── EG BOX ── */
+.eg-box {
+  background: var(--bg); border-radius: 10px; border: 1px solid var(--border);
+  padding: 14px 16px; font-size: 14px; color: var(--text); line-height: 1.65;
+  margin-top: 4px;
+}
+.eg-box .eg-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 8px;
+}
+.eg-box strong { color: var(--primary); font-weight: 700; }
+
+/* ── PILL ── */
+.pill-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.pill {
+  display: inline-flex; padding: 5px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 700;
+  background: var(--bg); color: var(--text); border: 1px solid var(--border);
+}
+.pill.orange { background: var(--primary-light); color: var(--primary); border-color: rgba(255,107,53,0.2); }
+.pill.blue   { background: #EEF5FF; color: var(--cold);    border-color: rgba(0,122,255,0.2); }
+.pill.green  { background: #EDFAF1; color: var(--success); border-color: rgba(52,199,89,0.2); }
+.pill.purple { background: #F0EBFF; color: var(--purple);  border-color: rgba(123,82,255,0.2); }
+.pill.warm   { background: #FFF8EE; color: var(--warm);    border-color: rgba(255,149,0,0.2); }
+.pill.red    { background: #FFF0EE; color: var(--hot);     border-color: rgba(255,59,48,0.2); }
+
+/* ── SAMPLING CARDS ── */
+.sampling-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-bottom: 16px;
+}
+.samp-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 24px; position: relative; overflow: hidden;
+}
+.samp-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; bottom: 0;
+  width: 4px; border-radius: 4px 0 0 4px;
+}
+.samp-card.s1::before { background: var(--cold); }
+.samp-card.s2::before { background: var(--warm); }
+.samp-card.s3::before { background: var(--success); }
+.samp-card.s4::before { background: var(--purple); }
+
+.samp-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 8px;
+  font-size: 13px; font-weight: 800; margin-bottom: 14px;
+}
+.samp-card.s1 .samp-num { background: #EEF5FF; color: var(--cold); }
+.samp-card.s2 .samp-num { background: #FFF8EE; color: var(--warm); }
+.samp-card.s3 .samp-num { background: #EDFAF1; color: var(--success); }
+.samp-card.s4 .samp-num { background: #F0EBFF; color: var(--purple); }
+
+.samp-card h3 { font-size: 17px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.3px; }
+.samp-card .tagline {
+  font-size: 13px; font-weight: 600; margin-bottom: 10px; padding: 5px 10px;
+  border-radius: 6px; display: inline-block;
+}
+.samp-card.s1 .tagline { background: #EEF5FF; color: var(--cold); }
+.samp-card.s2 .tagline { background: #FFF8EE; color: var(--warm); }
+.samp-card.s3 .tagline { background: #EDFAF1; color: var(--success); }
+.samp-card.s4 .tagline { background: #F0EBFF; color: var(--purple); }
+
+.samp-card p { font-size: 14px; color: var(--text-muted); line-height: 1.75; margin-bottom: 14px; }
+
+/* Visual dot diagrams */
+.dot-visual {
+  background: var(--bg); border-radius: 10px; border: 1px solid var(--border);
+  padding: 14px 16px; margin-bottom: 14px;
+}
+.dot-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px;
+}
+.dot-row { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.dot {
+  width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: white;
+  flex-shrink: 0;
+}
+.dot.all   { background: var(--border); }
+.dot.sel.blue   { background: var(--cold);    }
+.dot.sel.orange { background: var(--primary); }
+.dot.sel.green  { background: var(--success); }
+.dot.sel.purple { background: var(--purple);  }
+.dot.grp   { background: var(--warm); }
+.dot-sep { font-size: 10px; color: var(--text-dim); padding: 0 2px; }
+
+/* pros cons row */
+.pc-row { display: flex; gap: 10px; margin-top: 4px; }
+.pc-box {
+  flex: 1; border-radius: 8px; padding: 10px 12px;
+  font-size: 13px; line-height: 1.6;
+}
+.pc-box.pro { background: #EDFAF1; color: #155a2a; }
+.pc-box.con { background: #FFF0EE; color: #8a1400; }
+.pc-box .pc-title { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 5px; }
+
+/* ── INSIGHT ── */
+.insight {
+  display: flex; align-items: flex-start; gap: 16px;
+  background: #FFF8EE; border: 1.5px solid #FFD9A0;
+  border-radius: 12px; padding: 18px 22px; margin-bottom: 16px;
+}
+.insight-icon { font-size: 24px; flex-shrink: 0; margin-top: 1px; }
+.insight p { font-size: 15px; color: #7a4a00; font-weight: 500; line-height: 1.7; }
+
+/* ── SIZE FORMULA ── */
+.formula-box {
+  background: var(--text); border-radius: 14px;
+  padding: 28px 32px; margin-bottom: 16px; position: relative; overflow: hidden;
+}
+.formula-box::before {
+  content: 'SAMPLE SIZE FORMULA';
+  font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+  color: var(--primary); display: block; margin-bottom: 18px;
+}
+.formula {
+  font-size: 28px; font-weight: 800; color: white;
+  letter-spacing: -0.5px; margin-bottom: 20px; text-align: center;
+  background: rgba(255,255,255,0.05); border-radius: 10px;
+  padding: 16px; border: 1px solid rgba(255,255,255,0.08);
+}
+.formula span { color: #FF9A3C; }
+.formula-parts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.fpart {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px; padding: 12px;
+}
+.fpart .sym { font-size: 18px; font-weight: 800; color: #FF9A3C; margin-bottom: 6px; }
+.fpart p { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.5; }
+
+/* ── QUALITY CHECKS ── */
+.checks-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; margin-bottom: 16px;
+}
+.check-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 22px;
+}
+.check-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+.check-card h4 { font-size: 16px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.2px; }
+.check-card p  { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px; }
+.check-card .fix-tag {
+  display: inline-flex; padding: 4px 10px; border-radius: 6px;
+  font-size: 12px; font-weight: 700; background: var(--primary-light); color: var(--primary);
+}
+
+/* ── SURVEY CARD ── */
+.survey-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; margin-bottom: 16px;
+}
+.survey-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 20px;
+}
+.survey-num {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; margin-bottom: 12px;
+  background: var(--primary-light); color: var(--primary);
+}
+.survey-card h4 { font-size: 15px; font-weight: 800; margin-bottom: 8px; }
+.survey-card p  { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px; }
+.bad-good {
+  display: flex; flex-direction: column; gap: 5px;
+  background: var(--bg); border-radius: 8px; padding: 10px 12px;
+  border: 1px solid var(--border);
+}
+.bg-row { display: flex; gap: 6px; align-items: flex-start; font-size: 13px; line-height: 1.5; }
+.bg-row.bad { color: #8a1400; }
+.bg-row.good{ color: #155a2a; }
+.bg-row .ico{ flex-shrink: 0; font-size: 12px; }
+
+/* ── PROJECT BLOCK ── */
+.project-block {
+  background: #0d1b2a; border-radius: 14px;
+  padding: 28px 32px; margin-bottom: 16px;
+  border: 1px solid #1e3a5a; position: relative; overflow: hidden;
+}
+.project-block::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--primary), #FF9A3C, var(--cold));
+}
+.proj-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+  color: var(--primary); text-transform: uppercase; margin-bottom: 10px;
+}
+.project-block h3 { font-size: 17px; font-weight: 700; color: white; margin-bottom: 16px; }
+.project-block p  { font-size: 14px; color: #8fb3cc; line-height: 1.8; margin-bottom: 8px; }
+.proj-result {
+  background: rgba(255,107,53,0.1); border: 1px solid rgba(255,107,53,0.25);
+  border-radius: 8px; padding: 12px 16px; margin-top: 16px;
+  font-size: 14px; color: #FF9A3C; font-weight: 600;
+}
+.proj-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+.proj-col-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 10px;
+  padding: 5px 10px; border-radius: 6px; display: inline-block;
+}
+.c-orange { background: rgba(255,107,53,0.15); color: #FF9A3C; }
+.c-blue   { background: rgba(0,122,255,0.15);  color: #58a9ff; }
+.c-green  { background: rgba(52,199,89,0.15);  color: #34C759; }
+.proj-point {
+  font-size: 14px; color: #a8c8e0;
+  padding: 5px 0 5px 18px; position: relative; line-height: 1.6; margin-bottom: 4px;
+}
+.proj-point::before { content: '→'; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+
+/* ── TABLE ── */
+.table-wrap {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden; margin-bottom: 16px;
+}
+.table-head-bar {
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text-dim); background: var(--bg);
+}
+table { width: 100%; border-collapse: collapse; }
+th {
+  text-align: left; padding: 12px 18px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-dim); background: var(--bg); border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 14px 18px; font-size: 14px;
+  border-bottom: 1px solid var(--border); vertical-align: middle; line-height: 1.55;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #FAFAFA; }
+.td-bold { font-weight: 700; }
+
+.dt-badge {
+  display: inline-flex; padding: 4px 10px;
+  border-radius: 8px; font-size: 12px; font-weight: 700;
+}
+.b-blue   { background: #EEF5FF; color: var(--cold); }
+.b-orange { background: var(--primary-light); color: var(--primary); }
+.b-green  { background: #EDFAF1; color: var(--success); }
+.b-purple { background: #F0EBFF; color: var(--purple); }
+.b-warm   { background: #FFF8EE; color: var(--warm); }
+
+/* ── WRONG RIGHT ── */
+.wr-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; margin-bottom: 16px;
+}
+.wr-card { border-radius: 12px; padding: 18px 20px; }
+.wr-card.wrong { background: #FFF0EE; border: 1.5px solid rgba(255,59,48,0.2); }
+.wr-card.right { background: #EDFAF1; border: 1.5px solid rgba(52,199,89,0.2); }
+.wr-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+.wr-card.wrong .wr-label { color: var(--hot); }
+.wr-card.right .wr-label { color: var(--success); }
+.wr-card p { font-size: 14px; line-height: 1.7; }
+.wr-card.wrong p { color: #7a1200; }
+.wr-card.right p { color: #0a4020; }
+
+/* ── SUMMARY ── */
+.summary {
+  background: var(--text); border-radius: 16px;
+  padding: 30px 34px; margin-top: 56px;
+}
+.summary-head {
+  font-size: 11px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--primary); margin-bottom: 16px;
+}
+.summary h2 { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; margin-bottom: 22px; }
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sum-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 14px 16px;
+}
+.sum-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex-shrink: 0; margin-top: 7px; }
+.sum-item p { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+.sum-item p strong { color: white; font-weight: 600; }
+.next-topic {
+  margin-top: 22px; padding-top: 22px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.next-topic p { font-size: 13px; color: rgba(255,255,255,0.4); }
+.next-btn {
+  background: var(--primary); color: white;
+  padding: 9px 20px; border-radius: 20px; font-size: 13px; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; box-shadow: 0 4px 12px rgba(255,107,53,0.35);
+}
+
+@media (max-width: 900px) {
+  .sampling-grid, .checks-grid, .survey-grid { grid-template-columns: 1fr 1fr; }
+  .formula-parts { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 680px) {
+  .split-grid, .wr-grid, .summary-grid, .proj-cols { grid-template-columns: 1fr; }
+  .sampling-grid, .checks-grid, .survey-grid { grid-template-columns: 1fr; }
+  .formula-parts { grid-template-columns: 1fr 1fr; }
+  .hero h1 { font-size: 28px; }
+  .content, .hero, .topbar { padding-left: 20px; padding-right: 20px; }
+  .formula { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-logo">DS</div>
+    <div>
+      <div class="brand-name">DataScience Notes</div>
+      <div class="brand-sub">Statistics Series — by a 20yr DS Pro</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="tag tag-orange">Topic 03 / N</span>
+    <span class="tag tag-blue">Foundation</span>
+    <span class="tag tag-green">~20 min</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="chapter-label">Chapter 03 · Statistics Series</div>
+  <h1>Data Collection <span>&</span> Sampling</h1>
+  <div class="hero-sub">Garbage in, garbage out. The most powerful model in the world can't fix bad data. Before any analysis — you must know how data was collected, and whether it truly represents reality.</div>
+  <div class="hero-stats">
+    <div class="hstat"><div class="val">2</div><div class="lbl">Data Sources</div></div>
+    <div class="hstat"><div class="val">4</div><div class="lbl">Sampling Methods</div></div>
+    <div class="hstat"><div class="val">6</div><div class="lbl">Quality Checks</div></div>
+    <div class="hstat"><div class="val">2</div><div class="lbl">Real Projects</div></div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- §1 WHY THIS MATTERS -->
+  <div class="section-head">
+    <div class="sec-num">§1</div>
+    <div class="sec-title">Why Data Collection Matters More Than Your Model</div>
+  </div>
+
+  <div class="card">
+    <p>Here's something they don't teach you enough in courses: <strong>a mediocre model on good data beats a great model on bad data every single time.</strong> I've seen teams spend weeks tuning XGBoost hyperparameters while their training data had a collection bias that made the entire thing useless.</p>
+    <p>Think about it simply — if you want to know what food Indians prefer, and you only survey people in Mumbai's 5-star hotels, your data is wrong before you even start analyzing. Your model will be confidently, precisely wrong. That's worse than no model at all.</p>
+  </div>
+
+  <div class="def-card">
+    <p><strong>Data Collection</strong> = the process of gathering raw information from the real world. <strong>Sampling</strong> = deciding which part of that world you actually measure — because you almost never have the time or money to measure everything. <strong>Get either of these wrong and all your analysis is built on a lie.</strong></p>
+  </div>
+
+  <div class="wr-grid">
+    <div class="wr-card wrong">
+      <div class="wr-label">❌ Real Mistake I've Seen</div>
+      <p>A startup built a customer satisfaction model. Survey was sent only via email. Result: only tech-savvy, younger, urban customers responded. Older customers — who were actually churning — were completely missed. Model said "customers are 78% happy." Reality: churn was at an all-time high. Collection bias killed the entire project.</p>
+    </div>
+    <div class="wr-card right">
+      <div class="wr-label">✅ The Right Way</div>
+      <p>Same survey — sent via email, SMS, IVR phone call, and in-store kiosk. Multiple collection channels ensured all customer segments responded. Survey results were representative. Model accurately predicted which customers were at risk. Churn reduced by 22% in 3 months.</p>
+    </div>
+  </div>
+
+  <!-- §2 PRIMARY VS SECONDARY -->
+  <div class="section-head">
+    <div class="sec-num">§2</div>
+    <div class="sec-title">Primary vs Secondary Data</div>
+  </div>
+
+  <div class="card">
+    <p>Every dataset you'll ever work with came from one of two places — either <strong>someone collected it fresh specifically for this problem</strong> (primary), or <strong>someone else collected it before for a different reason</strong> and you're reusing it (secondary). Both are valid, but they come with very different trade-offs.</p>
+  </div>
+
+  <div class="split-grid">
+    <div class="split-card blue">
+      <div class="split-type">Source Type A</div>
+      <h3>🎯 Primary Data</h3>
+      <p>You go out and collect it yourself, <strong>fresh</strong>, for your specific problem. It's tailored exactly to your question. Expensive and slow, but highly relevant and reliable.</p>
+      <strong style="display:block; font-size:14px; margin-bottom:10px;">How it's collected:</strong>
+      <div class="pill-list">
+        <span class="pill blue">Surveys & Questionnaires</span>
+        <span class="pill blue">Interviews</span>
+        <span class="pill blue">Experiments / A/B tests</span>
+        <span class="pill blue">Observations</span>
+        <span class="pill blue">Focus groups</span>
+        <span class="pill blue">Sensor / IoT data</span>
+      </div>
+      <div class="eg-box">
+        <div class="eg-label">Real Example</div>
+        <strong>Swiggy</strong> wants to know why users abandon the cart. They run an in-app survey that pops up right after cart abandonment. That's primary — collected fresh, exactly for this question. Very relevant. Cost: dev time + user experience interruption.
+      </div>
+      <div class="pc-row" style="margin-top:12px;">
+        <div class="pc-box pro"><div class="pc-title">✅ Pros</div>Exact fit for your question. You control quality. Fresh and current.</div>
+        <div class="pc-box con"><div class="pc-title">❌ Cons</div>Expensive. Time-consuming. Needs careful design to avoid bias.</div>
+      </div>
+    </div>
+    <div class="split-card orange">
+      <div class="split-type">Source Type B</div>
+      <h3>📦 Secondary Data</h3>
+      <p>Someone else collected it for a <strong>different purpose</strong>. You're reusing it. Faster and cheaper to get — but you have less control over how it was collected and whether it truly fits your problem.</p>
+      <strong style="display:block; font-size:14px; margin-bottom:10px;">Where it comes from:</strong>
+      <div class="pill-list">
+        <span class="pill orange">Government databases (census, RBI)</span>
+        <span class="pill orange">Research papers</span>
+        <span class="pill orange">Company's own historical data</span>
+        <span class="pill orange">Kaggle / Public datasets</span>
+        <span class="pill orange">Third-party data providers</span>
+      </div>
+      <div class="eg-box">
+        <div class="eg-label">Real Example</div>
+        <strong>HDFC Bank</strong> wants to build a credit risk model. They use RBI's published borrower data + their own 10 years of historical loan records. Both are secondary — collected earlier for other purposes (regulatory reporting), but now reused for ML. Saves 2+ years of data collection.
+      </div>
+      <div class="pc-row" style="margin-top:12px;">
+        <div class="pc-box pro"><div class="pc-title">✅ Pros</div>Fast and cheap. Often large volumes. Historical data available.</div>
+        <div class="pc-box con"><div class="pc-title">❌ Cons</div>May not fit your exact question. Quality unknown. Could be outdated.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note-bar blue">
+    💡 <strong>In real DS projects, you almost always use both.</strong> Secondary data gives you the historical baseline and scale. Primary data fills the gaps where secondary data doesn't have what you need. Example: use past transaction data (secondary) + run a fresh customer survey (primary) for a churn model.
+  </div>
+
+  <!-- §3 SAMPLING — BIG IDEA -->
+  <div class="section-head">
+    <div class="sec-num">§3</div>
+    <div class="sec-title">What is Sampling? The Core Idea</div>
+  </div>
+
+  <div class="card">
+    <p><strong>Imagine you're a doctor checking if someone has a fever.</strong> You don't boil their entire body — you put a thermometer under their arm for 30 seconds. That small measurement tells you about the whole body's condition. That is exactly what sampling is.</p>
+    <p>In data science: your <strong>population</strong> is everyone/everything you care about (all 1.4 billion Indians, all 5 million app users). Your <strong>sample</strong> is the smaller group you actually measure. If your sample is chosen well — it represents the population accurately. Choose it badly — and your conclusions are wrong for everyone.</p>
+  </div>
+
+  <div class="insight">
+    <div class="insight-icon">🩺</div>
+    <p><strong>The Doctor Analogy:</strong> A blood test takes 5ml of blood to understand what's happening in your entire 5 litres of blood (0.1% sample). It works because blood is well-mixed and the sample is taken correctly. If the doctor only took blood from a bruised area — the result would be wrong. Same principle in DS: method of sampling determines if results are trustworthy.</p>
+  </div>
+
+  <!-- §4 SAMPLING METHODS -->
+  <div class="section-head">
+    <div class="sec-num">§4</div>
+    <div class="sec-title">4 Sampling Methods — When to Use Which</div>
+  </div>
+
+  <div class="card">
+    <p>There is no single "best" sampling method. Each one is the right tool for a specific situation. A good data scientist knows all four and chooses based on the problem. Let's break each one down with a concrete, easy-to-remember example.</p>
+  </div>
+
+  <div class="sampling-grid">
+
+    <!-- Simple Random -->
+    <div class="samp-card s1">
+      <div class="samp-num">01</div>
+      <h3>Simple Random Sampling</h3>
+      <div class="tagline">🎰 "Lucky Draw" method</div>
+      <p>Every single person/item in the population has an <strong>equal chance</strong> of being selected. Completely random — like pulling names from a hat. No rules, no structure, just pure randomness.</p>
+
+      <div class="dot-visual">
+        <div class="dot-label">Visual — 20 users, pick 5 randomly</div>
+        <div class="dot-row">
+          <div class="dot all"></div><div class="dot sel blue">✓</div><div class="dot all"></div>
+          <div class="dot all"></div><div class="dot sel blue">✓</div><div class="dot all"></div>
+          <div class="dot sel blue">✓</div><div class="dot all"></div><div class="dot all"></div>
+          <div class="dot sel blue">✓</div><div class="dot all"></div><div class="dot sel blue">✓</div>
+          <div class="dot all"></div><div class="dot all"></div><div class="dot all"></div>
+          <div class="dot all"></div><div class="dot all"></div><div class="dot all"></div>
+          <div class="dot all"></div><div class="dot all"></div>
+        </div>
+      </div>
+
+      <div class="eg-box" style="margin-bottom:12px;">
+        <div class="eg-label">Real Project Example</div>
+        <strong>Flipkart QA Testing:</strong> 50,000 orders shipped today. We want to manually quality-check 500 of them. We assign every order a number and use a random number generator to pick 500. No pattern, pure random. Each order had equal chance of being picked.
+      </div>
+      <div class="pc-row">
+        <div class="pc-box pro"><div class="pc-title">✅ Best when</div>Population is similar (homogeneous) and you have a complete list of everyone.</div>
+        <div class="pc-box con"><div class="pc-title">❌ Not great when</div>Population has very different subgroups — some might get zero representation purely by chance.</div>
+      </div>
+    </div>
+
+    <!-- Systematic -->
+    <div class="samp-card s2">
+      <div class="samp-num">02</div>
+      <h3>Systematic Sampling</h3>
+      <div class="tagline">📏 "Every Nth person" method</div>
+      <p>Pick a random starting point, then select <strong>every Nth item</strong> from a list. Structured and easy to execute in the field without needing a computer. Very practical for large, ordered populations.</p>
+
+      <div class="dot-visual">
+        <div class="dot-label">Visual — pick every 4th person (start at position 2)</div>
+        <div class="dot-row">
+          <div class="dot all">1</div><div class="dot sel orange">2</div>
+          <div class="dot all">3</div><div class="dot all">4</div>
+          <div class="dot all">5</div><div class="dot sel orange">6</div>
+          <div class="dot all">7</div><div class="dot all">8</div>
+          <div class="dot all">9</div><div class="dot sel orange">10</div>
+          <div class="dot all">11</div><div class="dot all">12</div>
+          <div class="dot all">13</div><div class="dot sel orange">14</div>
+        </div>
+      </div>
+
+      <div class="eg-box" style="margin-bottom:12px;">
+        <div class="eg-label">Real Project Example</div>
+        <strong>Bank ATM Survey:</strong> We want to survey ATM users about their experience. Instead of picking randomly (messy to do in person), we instruct the field agent: "Survey every 5th person who walks out of the ATM." Simple, repeatable, no laptop needed. Works beautifully in the field.
+      </div>
+      <div class="pc-row">
+        <div class="pc-box pro"><div class="pc-title">✅ Best when</div>Population is ordered (queue, assembly line, list). Easy to implement without tech.</div>
+        <div class="pc-box con"><div class="pc-title">❌ Watch out</div>If there's a hidden pattern at every Nth position (e.g., shift changes at same interval), you'll get biased results.</div>
+      </div>
+    </div>
+
+    <!-- Stratified -->
+    <div class="samp-card s3">
+      <div class="samp-num">03</div>
+      <h3>Stratified Sampling</h3>
+      <div class="tagline">🗂️ "Divide then pick" method</div>
+      <p>Split the population into meaningful subgroups called <strong>strata</strong> (e.g., age groups, cities, income levels), then randomly sample from <strong>each group proportionally</strong>. Guarantees every important subgroup is represented.</p>
+
+      <div class="dot-visual">
+        <div class="dot-label">Visual — 3 strata: Young / Mid-age / Senior → sample from each</div>
+        <div class="dot-row">
+          <span style="font-size:11px; color:var(--cold); font-weight:700;">Young:</span>
+          <div class="dot sel blue">✓</div><div class="dot all"></div><div class="dot sel blue">✓</div><div class="dot all"></div>
+          <div class="dot-sep">|</div>
+          <span style="font-size:11px; color:var(--success); font-weight:700;">Mid:</span>
+          <div class="dot sel green">✓</div><div class="dot all"></div><div class="dot sel green">✓</div>
+          <div class="dot-sep">|</div>
+          <span style="font-size:11px; color:var(--warm); font-weight:700;">Senior:</span>
+          <div class="dot sel orange">✓</div><div class="dot all"></div>
+        </div>
+      </div>
+
+      <div class="eg-box" style="margin-bottom:12px;">
+        <div class="eg-label">Real Project Example</div>
+        <strong>Election Exit Poll (like NDTV):</strong> India has voters from very different states, ages, and income groups. Simple random might accidentally undersample rural voters. Stratified sampling divides voters into states + age groups + urban/rural, then samples proportionally from each. Result: accurate prediction despite only surveying 50,000 out of 900 million voters.
+      </div>
+      <div class="pc-row">
+        <div class="pc-box pro"><div class="pc-title">✅ Best when</div>Population has important, distinct subgroups you can't afford to miss. Most common in professional DS work.</div>
+        <div class="pc-box con"><div class="pc-title">❌ Needs</div>You must know the strata beforehand and have a complete list of who belongs where.</div>
+      </div>
+    </div>
+
+    <!-- Cluster -->
+    <div class="samp-card s4">
+      <div class="samp-num">04</div>
+      <h3>Cluster Sampling</h3>
+      <div class="tagline">🏘️ "Pick whole neighbourhoods" method</div>
+      <p>Divide the population into groups called <strong>clusters</strong> (usually geographic). Then randomly select a few clusters and <strong>survey everyone inside them</strong>. Instead of going everywhere a little — you go somewhere completely.</p>
+
+      <div class="dot-visual">
+        <div class="dot-label">Visual — 6 clusters (cities), select 2 entire clusters</div>
+        <div class="dot-row">
+          <span style="font-size:11px; color:var(--text-dim); font-weight:700;">Delhi:</span>
+          <div class="dot all"></div><div class="dot all"></div><div class="dot all"></div>
+          <div class="dot-sep">|</div>
+          <span style="font-size:11px; color:var(--purple); font-weight:700;">Mumbai:</span>
+          <div class="dot sel purple">✓</div><div class="dot sel purple">✓</div><div class="dot sel purple">✓</div>
+          <div class="dot-sep">|</div>
+          <span style="font-size:11px; color:var(--text-dim); font-weight:700;">Chennai:</span>
+          <div class="dot all"></div><div class="dot all"></div>
+          <div class="dot-sep">|</div>
+          <span style="font-size:11px; color:var(--purple); font-weight:700;">Pune:</span>
+          <div class="dot sel purple">✓</div><div class="dot sel purple">✓</div>
+        </div>
+      </div>
+
+      <div class="eg-box" style="margin-bottom:12px;">
+        <div class="eg-label">Real Project Example</div>
+        <strong>FMCG Product Launch (HUL style):</strong> Hindustan Unilever wants to survey rural buying habits across India — 600,000 villages. Sending researchers everywhere is impossible. Solution: randomly pick 50 districts, then survey every household in those districts. Massively cheaper. Researchers travel to fewer locations but go deep.
+      </div>
+      <div class="pc-row">
+        <div class="pc-box pro"><div class="pc-title">✅ Best when</div>Population is geographically spread and expensive to reach. Saves massive time and money.</div>
+        <div class="pc-box con"><div class="pc-title">❌ Risk</div>If selected clusters are not representative of all clusters, results are biased. Higher sampling error than stratified.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison table -->
+  <div class="table-wrap">
+    <div class="table-head-bar">Quick Comparison — Which Method to Use When?</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>How it works</th>
+          <th>Best for</th>
+          <th>Common DS Use Case</th>
+          <th>Complexity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="dt-badge b-blue">Simple Random</span></td>
+          <td style="font-size:13px; color:var(--text-muted);">Every item has equal chance — pure random draw</td>
+          <td style="font-size:13px;">Similar / homogeneous populations</td>
+          <td style="font-size:13px; color:var(--text-muted);">QA testing, A/B test assignment</td>
+          <td><span class="dt-badge b-green">Low</span></td>
+        </tr>
+        <tr>
+          <td><span class="dt-badge b-warm">Systematic</span></td>
+          <td style="font-size:13px; color:var(--text-muted);">Random start → every Nth item selected</td>
+          <td style="font-size:13px;">Ordered lists, field surveys</td>
+          <td style="font-size:13px; color:var(--text-muted);">Factory QC, ATM user surveys</td>
+          <td><span class="dt-badge b-green">Low</span></td>
+        </tr>
+        <tr>
+          <td><span class="dt-badge b-green">Stratified</span></td>
+          <td style="font-size:13px; color:var(--text-muted);">Split into subgroups → random sample from each</td>
+          <td style="font-size:13px;">Diverse populations with distinct subgroups</td>
+          <td style="font-size:13px; color:var(--text-muted);">Customer segmentation, elections</td>
+          <td><span class="dt-badge b-warm">Medium</span></td>
+        </tr>
+        <tr>
+          <td><span class="dt-badge b-purple">Cluster</span></td>
+          <td style="font-size:13px; color:var(--text-muted);">Split into clusters → pick a few → survey all in them</td>
+          <td style="font-size:13px;">Geographically spread populations</td>
+          <td style="font-size:13px; color:var(--text-muted);">Rural surveys, retail store sampling</td>
+          <td><span class="dt-badge b-orange">High</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- §5 SAMPLE SIZE -->
+  <div class="section-head">
+    <div class="sec-num">§5</div>
+    <div class="sec-title">Sample Size — How Many is Enough?</div>
+  </div>
+
+  <div class="card">
+    <p>This is the most common question I get from junior data scientists: <strong>"How many samples do I need?"</strong> Too few samples and your results are unreliable (too much noise). Too many and you're wasting money and time collecting data you don't need. There's a formula — but more importantly, there's an intuition behind it.</p>
+    <p>The key insight: <strong>Sample size depends on how much error you're willing to accept and how confident you want to be.</strong> If you're testing a new drug (life or death), you need near-perfect accuracy → huge sample. If you're testing whether a blue button vs orange button gets more clicks → much smaller sample is fine.</p>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula">
+      n = <span>(Z² × p × (1 − p))</span> / E²
+    </div>
+    <div class="formula-parts">
+      <div class="fpart">
+        <div class="sym">n</div>
+        <p>Sample size you need to collect</p>
+      </div>
+      <div class="fpart">
+        <div class="sym">Z</div>
+        <p>Confidence level score<br><span style="color:rgba(255,255,255,0.4); font-size:12px;">95% confidence → Z = 1.96<br>99% confidence → Z = 2.58</span></p>
+      </div>
+      <div class="fpart">
+        <div class="sym">p</div>
+        <p>Expected proportion<br><span style="color:rgba(255,255,255,0.4); font-size:12px;">Use 0.5 if unknown (gives max sample size — safest choice)</span></p>
+      </div>
+      <div class="fpart">
+        <div class="sym">E</div>
+        <p>Margin of error you can accept<br><span style="color:rgba(255,255,255,0.4); font-size:12px;">5% margin → E = 0.05<br>Smaller E = bigger sample needed</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p><strong>Simple example:</strong> Zomato wants to survey customer satisfaction. They want to be 95% confident, with a 5% margin of error, and don't know the expected proportion → use p = 0.5.</p>
+    <p style="font-size:15px; background: var(--bg); padding: 14px 18px; border-radius: 10px; border: 1px solid var(--border); font-weight:600; margin-top: 8px;">
+      n = (1.96² × 0.5 × 0.5) / 0.05² = (3.84 × 0.25) / 0.0025 = 0.96 / 0.0025 = <span style="color: var(--primary);">384 people</span>
+    </p>
+    <p style="margin-top:12px;">Zomato has 80 million users. But they only need to survey <strong>384 people</strong> to get results that are 95% accurate within ±5%. That's the power of proper sampling — 384 out of 80 million (0.0005%) is enough!</p>
+  </div>
+
+  <div class="note-bar warm">
+    ⚡ <strong>Practical rule of thumb from experience:</strong> For most business problems — 385 samples gives 95% confidence at 5% error. For life-critical work (medicine, safety) — aim for 99% confidence (2.58 Z-score). For quick internal experiments — even 100-200 samples can give useful directional insights. Always calculate before collecting, not after.
+  </div>
+
+  <!-- §6 DATA QUALITY -->
+  <div class="section-head">
+    <div class="sec-num">§6</div>
+    <div class="sec-title">Data Quality Checks</div>
+  </div>
+
+  <div class="card">
+    <p>Once you have your data — don't start analyzing immediately. Run quality checks first. In my experience, raw data from the real world almost always has at least 2–3 quality issues. Finding them <em>before</em> analysis saves you from building a model on garbage. Finding them <em>after</em> — when you've already presented to stakeholders — is a career-damaging embarrassment I've seen happen.</p>
+  </div>
+
+  <div class="checks-grid">
+    <div class="check-card">
+      <span class="check-icon">🕳️</span>
+      <h4>Missing Values</h4>
+      <p>Empty cells in your data. Could be because someone skipped a survey question, a sensor malfunctioned, or a system glitch. Must be handled before any model.</p>
+      <div class="eg-box" style="font-size:13px; margin-bottom:10px;">Age column: 1,000 rows, but 87 rows have blank age. That's 8.7% missing. Ignoring this crashes most ML algorithms.</div>
+      <span class="fix-tag">Fix: Impute with median / flag as separate category / drop if &lt;5%</span>
+    </div>
+
+    <div class="check-card">
+      <span class="check-icon">👽</span>
+      <h4>Outliers</h4>
+      <p>Values that are extreme — way too high or too low compared to the rest. Sometimes real (a billionaire in a salary survey). Sometimes errors (age = 999).</p>
+      <div class="eg-box" style="font-size:13px; margin-bottom:10px;">Salary data: most values ₹3L–₹20L. One row says ₹99,99,999. Data entry error or Mukesh Ambani? Must investigate.</div>
+      <span class="fix-tag">Fix: Box plot / IQR method / cap at 99th percentile / delete if error</span>
+    </div>
+
+    <div class="check-card">
+      <span class="check-icon">👯</span>
+      <h4>Duplicate Records</h4>
+      <p>The same row appearing multiple times. Happens from system bugs, double form submissions, or merging two databases that had overlapping records.</p>
+      <div class="eg-box" style="font-size:13px; margin-bottom:10px;">Customer database: Ramesh Gupta appears 3 times with same phone number. All 3 rows are identical — system logged the signup 3 times.</div>
+      <span class="fix-tag">Fix: df.drop_duplicates() in pandas / check on unique ID columns</span>
+    </div>
+
+    <div class="check-card">
+      <span class="check-icon">🏷️</span>
+      <h4>Inconsistent Labels</h4>
+      <p>Same thing written in different ways across rows. Makes your model think they're different categories when they're actually the same thing.</p>
+      <div class="eg-box" style="font-size:13px; margin-bottom:10px;">City column: "mumbai", "Mumbai", "MUMBAI", "Bombay", "mum" — all mean the same city but appear as 5 different values to a machine.</div>
+      <span class="fix-tag">Fix: .str.lower().strip() + mapping dictionary to standardize</span>
+    </div>
+
+    <div class="check-card">
+      <span class="check-icon">⏰</span>
+      <h4>Wrong Data Types</h4>
+      <p>A number stored as text, a date stored as a plain string. Pandas will read "₹45,000" as an object (text), not a number. You can't do math on it until it's fixed.</p>
+      <div class="eg-box" style="font-size:13px; margin-bottom:10px;">Revenue column imported from CSV: "45,000.00" — looks like a number, but the comma makes Python treat it as a string. df.mean() returns an error.</div>
+      <span class="fix-tag">Fix: pd.to_numeric() / pd.to_datetime() / regex to remove commas</span>
+    </div>
+
+    <div class="check-card">
+      <span class="check-icon">⚖️</span>
+      <h4>Sampling Bias</h4>
+      <p>Your sample doesn't represent the actual population. The most dangerous quality issue because it's hardest to detect — your data looks fine but conclusions are systematically wrong.</p>
+      <div class="eg-box" style="font-size:13px; margin-bottom:10px;">Surveying app users only via push notification — people who've turned off notifications (often less engaged users) are automatically excluded. Your "satisfaction score" is biased high.</div>
+      <span class="fix-tag">Fix: Compare sample demographics vs known population demographics</span>
+    </div>
+  </div>
+
+  <!-- §7 SURVEY DESIGN -->
+  <div class="section-head">
+    <div class="sec-num">§7</div>
+    <div class="sec-title">Survey Design Principles</div>
+  </div>
+
+  <div class="card">
+    <p>When you're collecting primary data through a survey — the <strong>way you write your questions</strong> determines the quality of the data you get back. A badly designed survey gives you confidently wrong data. I've reviewed hundreds of surveys in my career and the same mistakes come up again and again. Here are the principles that separate good surveys from bad ones.</p>
+  </div>
+
+  <div class="survey-grid">
+    <div class="survey-card">
+      <div class="survey-num">01</div>
+      <h4>Ask One Thing at a Time</h4>
+      <p>Never put two questions in one. The respondent doesn't know which part to answer, and you can't interpret the result.</p>
+      <div class="bad-good">
+        <div class="bg-row bad"><span class="ico">❌</span> "Was the delivery fast and the packaging good?"</div>
+        <div class="bg-row good"><span class="ico">✅</span> Q1: "Was the delivery fast?" Q2: "Was the packaging good?"</div>
+      </div>
+    </div>
+
+    <div class="survey-card">
+      <div class="survey-num">02</div>
+      <h4>Use Neutral Language</h4>
+      <p>Loaded or leading words push respondents toward a particular answer — your data reflects your bias, not their opinion.</p>
+      <div class="bad-good">
+        <div class="bg-row bad"><span class="ico">❌</span> "Don't you agree that our amazing app saves you time?"</div>
+        <div class="bg-row good"><span class="ico">✅</span> "How much time does using this app save you per day?"</div>
+      </div>
+    </div>
+
+    <div class="survey-card">
+      <div class="survey-num">03</div>
+      <h4>Offer Complete Options</h4>
+      <p>If your answer choices don't cover all possibilities, respondents are forced to lie. Always include "Other" or "Not applicable".</p>
+      <div class="bad-good">
+        <div class="bg-row bad"><span class="ico">❌</span> How do you pay? [Cash / Card] — what about UPI?</div>
+        <div class="bg-row good"><span class="ico">✅</span> [Cash / Card / UPI / Net Banking / Other]</div>
+      </div>
+    </div>
+
+    <div class="survey-card">
+      <div class="survey-num">04</div>
+      <h4>Keep It Short</h4>
+      <p>Every extra question reduces completion rate. More than 10 questions and you start losing respondents — especially on mobile. Quality over quantity.</p>
+      <div class="bad-good">
+        <div class="bg-row bad"><span class="ico">❌</span> 45-question survey → 12% completion rate</div>
+        <div class="bg-row good"><span class="ico">✅</span> 7-question survey → 68% completion rate + better quality answers</div>
+      </div>
+    </div>
+
+    <div class="survey-card">
+      <div class="survey-num">05</div>
+      <h4>Pilot Test First</h4>
+      <p>Send the survey to 10–20 people internally before launching. You'll catch confusing questions, missing options, and technical bugs before they corrupt your data at scale.</p>
+      <div class="bad-good">
+        <div class="bg-row bad"><span class="ico">❌</span> Launch to 10,000 users → discover "Submit" button was broken on iOS after 3 days</div>
+        <div class="bg-row good"><span class="ico">✅</span> 15-person pilot → caught the iOS bug → fixed → clean data collected</div>
+      </div>
+    </div>
+
+    <div class="survey-card">
+      <div class="survey-num">06</div>
+      <h4>Avoid Recall Bias</h4>
+      <p>Asking people to remember the past is unreliable. The longer ago, the less accurate. Always ask about recent experiences where possible.</p>
+      <div class="bad-good">
+        <div class="bg-row bad"><span class="ico">❌</span> "How many times did you order food online in the last year?"</div>
+        <div class="bg-row good"><span class="ico">✅</span> "How many times did you order food online in the last 7 days?"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- §8 REAL PROJECT -->
+  <div class="section-head">
+    <div class="sec-num">§8</div>
+    <div class="sec-title">Real Project — Sampling Everything Together</div>
+  </div>
+
+  <div class="project-block">
+    <div class="proj-label">⚡ Real Project · Customer Satisfaction Study · FMCG / Consumer Goods</div>
+    <h3>Hindustan Unilever Style — Pan-India Customer Satisfaction Survey for a New Soap Brand</h3>
+    <p>The brand had just launched in 8 states. 3 months post-launch, leadership wanted to know: are customers satisfied? Would they repurchase? What's working vs not? Classic primary data collection + sampling problem.</p>
+
+    <div class="proj-cols">
+      <div>
+        <div class="proj-col-title c-orange">Step 1 · Data Source Decision</div>
+        <div class="proj-point">Chose <strong>primary data</strong> — no secondary data exists for a new product</div>
+        <div class="proj-point">Method: in-store intercept survey (field agents approach shoppers) + post-purchase SMS survey sent via retailer POS system</div>
+        <div class="proj-point">Two channels = reduced single-channel bias (not just digital-savvy users)</div>
+      </div>
+      <div>
+        <div class="proj-col-title c-blue">Step 2 · Sampling Method</div>
+        <div class="proj-point">Used <strong>Stratified Sampling</strong> — divided India into 4 zones (North/South/East/West) and 3 city tiers (Metro/Tier-2/Rural)</div>
+        <div class="proj-point">12 strata total — proportional sample from each to match actual sales distribution</div>
+        <div class="proj-point">Ensured rural voice wasn't drowned out by urban respondents (common mistake)</div>
+      </div>
+    </div>
+
+    <div class="proj-cols" style="margin-top:14px;">
+      <div>
+        <div class="proj-col-title c-green">Step 3 · Sample Size Calc</div>
+        <div class="proj-point">Needed 95% confidence, 5% margin of error → formula gave n = 384 per stratum</div>
+        <div class="proj-point">12 strata × 384 = 4,608 total surveys needed</div>
+        <div class="proj-point">Added 20% buffer for non-responses → targeted 5,530 surveys</div>
+      </div>
+      <div>
+        <div class="proj-col-title c-orange">Step 4 · Quality Checks Run</div>
+        <div class="proj-point">Found 340 duplicate entries (same phone number submitted twice) — removed</div>
+        <div class="proj-point">City field had 14 variations of "Bangalore/Bengaluru/blr" — standardized</div>
+        <div class="proj-point">Rating column had 3 entries with value "0" — invalid (scale was 1–5) — treated as missing</div>
+        <div class="proj-point">Pilot with 50 people caught that Q4 was confusing — reworded before full launch</div>
+      </div>
+    </div>
+
+    <div class="proj-result">
+      💡 Final Result: 5,211 clean responses collected. Satisfaction score: 3.8/5 overall, but only 2.9/5 in rural South India. Without stratified sampling, the rural South signal would have been lost in the aggregate score. Brand used this to reformulate the scent specifically for South Indian preferences. Next quarter: repurchase rate in that region jumped 34%.
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary">
+    <div class="summary-head">Chapter Summary</div>
+    <h2>What you must take away from this chapter ↓</h2>
+    <div class="summary-grid">
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>Garbage in, garbage out.</strong> No model fixes bad data. Data collection quality determines your entire project's reliability — not the algorithm you choose.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>Primary = fresh, yours, expensive.</strong> Secondary = existing, fast, cheap. Real projects use both — secondary for scale/history, primary to fill gaps.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>Simple Random</strong> = equal chance for all. <strong>Systematic</strong> = every Nth person. <strong>Stratified</strong> = divide into groups, sample from each. <strong>Cluster</strong> = pick whole groups.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>384 people = 95% confidence at 5% error</strong> — regardless of whether your population is 10,000 or 80 million. This number surprises everyone the first time they see it.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>Always run quality checks first:</strong> missing values, outliers, duplicates, inconsistent labels, wrong data types, sampling bias. Find them before analysis, not after.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>Survey design = data quality.</strong> One question at a time, neutral language, complete options, short surveys, pilot test first. Bad questions = useless data, no matter how large the sample.</p>
+      </div>
+    </div>
+    <div class="next-topic">
+      <p>Completed: Chapter 03 · Data Collection & Sampling</p>
+      <div class="next-btn">Next: Measures of Central Tendency →</div>
+    </div>
+  </div>
+
+</div><!-- end content -->
+</body>
+</html>
