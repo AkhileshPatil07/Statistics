@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>01 — Introduction to Statistics</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #FF6B35;
+  --primary-light: #FFF3EE;
+  --primary-dark: #E85520;
+  --bg: #F5F5F7;
+  --white: #FFFFFF;
+  --border: #E8E8EC;
+  --text: #1C1C1E;
+  --text-muted: #8E8E93;
+  --text-dim: #AEAEB2;
+  --hot: #FF3B30;
+  --warm: #FF9500;
+  --cold: #007AFF;
+  --success: #34C759;
+  --purple: #7B52FF;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* ── TOP HEADER BAR ── */
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--primary), #FF9A3C);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+.brand-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-top: 1px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.tag-orange { background: var(--primary-light); color: var(--primary); }
+.tag-blue   { background: #EEF5FF; color: var(--cold); }
+.tag-green  { background: #EDFAF1; color: var(--success); }
+
+/* ── HERO ── */
+.hero {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 40px 40px 36px;
+}
+
+.chapter-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.hero h1 {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+.hero h1 span { color: var(--primary); }
+
+.hero-sub {
+  font-size: 15px;
+  color: var(--text-muted);
+  font-weight: 400;
+  max-width: 680px;
+  margin-bottom: 24px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 32px;
+}
+
+.hstat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hstat .val {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.hstat .lbl {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hstat:nth-child(1) .val { color: var(--primary); }
+.hstat:nth-child(2) .val { color: var(--cold); }
+.hstat:nth-child(3) .val { color: var(--success); }
+
+/* ── CONTENT ── */
+.content {
+  padding: 36px 40px;
+  max-width: 100%;
+}
+
+/* ── SECTION HEADER ── */
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  margin-top: 48px;
+}
+
+.section-head:first-child { margin-top: 0; }
+
+.sec-num {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--primary), #FF9A3C);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(255,107,53,0.3);
+}
+
+.sec-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+/* ── CARD BASE ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.card p, .card li {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 400;
+  line-height: 1.75;
+}
+
+/* ── DEFINITION CARD ── */
+.def-card {
+  background: var(--text);
+  border-radius: 14px;
+  padding: 24px 28px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.def-card::before {
+  content: 'DEFINITION';
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  color: var(--primary);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.def-card::after {
+  content: '{ }';
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 60px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.04);
+  pointer-events: none;
+}
+
+.def-card p {
+  color: rgba(255,255,255,0.9) !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  line-height: 1.7;
+}
+
+.def-card strong { color: #FF9A3C; }
+
+/* ── FLOW ── */
+.flow-wrap {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.flow-box {
+  flex: 1;
+  min-width: 120px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: center;
+}
+
+.flow-box .fb-step {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.flow-box .fb-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.flow-arrow {
+  font-size: 18px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+/* ── ANNOTATION / STICKY ── */
+.note-bar {
+  border-left: 4px solid var(--primary);
+  background: var(--primary-light);
+  border-radius: 0 12px 12px 0;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-dark);
+  line-height: 1.65;
+}
+
+.note-bar.blue {
+  border-left-color: var(--cold);
+  background: #EEF5FF;
+  color: #005bb5;
+}
+
+.note-bar.green {
+  border-left-color: var(--success);
+  background: #EDFAF1;
+  color: #1a7a3a;
+}
+
+.note-bar.warm {
+  border-left-color: var(--warm);
+  background: #FFF8EE;
+  color: #8a5000;
+}
+
+/* ── ROLE CARDS ── */
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.role-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  transition: border-color 0.15s;
+}
+
+.role-card:hover { border-color: var(--primary); }
+
+.role-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.role-card h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.2px;
+}
+
+.role-card p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.role-eg {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.5;
+  border: 1px solid var(--border);
+}
+
+.role-eg strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* ── COMPARE GRID ── */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.cmp-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  border-top-width: 4px;
+}
+
+.cmp-card.desc { border-top-color: var(--success); }
+.cmp-card.inf  { border-top-color: var(--cold); }
+
+.cmp-type {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.cmp-card.desc .cmp-type { color: var(--success); }
+.cmp-card.inf  .cmp-type { color: var(--cold); }
+
+.cmp-card h3 {
+  font-size: 17px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+
+.cmp-card .question {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border-radius: 8px;
+}
+
+.pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.pill {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.cmp-eg {
+  font-size: 12px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  line-height: 1.55;
+  font-style: italic;
+}
+
+/* ── PROJECT BLOCK ── */
+.project-block {
+  background: #0d1b2a;
+  border-radius: 14px;
+  padding: 24px 28px;
+  margin-bottom: 16px;
+  border: 1px solid #1e3a5a;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-block::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), #FF9A3C, var(--cold));
+}
+
+.proj-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.project-block h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 14px;
+  letter-spacing: -0.2px;
+}
+
+.project-block p {
+  font-size: 13px;
+  color: #8fb3cc;
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+.proj-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.proj-col-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.col-desc  { background: rgba(52,199,89,0.15);  color: #34C759; }
+.col-inf   { background: rgba(0,122,255,0.15);   color: #58a9ff; }
+
+.proj-point {
+  font-size: 13px;
+  color: #a8c8e0;
+  padding: 5px 0;
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.55;
+}
+
+.proj-point::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.proj-result {
+  background: rgba(255,107,53,0.1);
+  border: 1px solid rgba(255,107,53,0.25);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: #FF9A3C;
+  font-weight: 600;
+}
+
+/* ── APP GRID ── */
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.app-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.app-domain {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.app-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.app-card h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: -0.2px;
+}
+
+.app-card p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.app-card:nth-child(1) { border-top: 3px solid var(--primary); }
+.app-card:nth-child(2) { border-top: 3px solid var(--cold); }
+.app-card:nth-child(3) { border-top: 3px solid var(--success); }
+.app-card:nth-child(4) { border-top: 3px solid var(--warm); }
+.app-card:nth-child(5) { border-top: 3px solid var(--purple); }
+.app-card:nth-child(6) { border-top: 3px solid var(--hot); }
+
+/* ── INSIGHT BAR ── */
+.insight {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #FFF8EE;
+  border: 1.5px solid #FFD9A0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+
+.insight-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.insight p {
+  font-size: 14px;
+  color: #7a4a00;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+/* ── SUMMARY ── */
+.summary {
+  background: var(--text);
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-top: 48px;
+}
+
+.summary-head {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 16px;
+}
+
+.summary h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.sum-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.sum-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.sum-item p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.55;
+}
+
+.sum-item p strong { color: white; font-weight: 600; }
+
+.next-topic {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.next-topic p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+}
+
+.next-btn {
+  background: var(--primary);
+  color: white;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255,107,53,0.35);
+}
+
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0 0 16px;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 900px) {
+  .role-grid, .app-grid { grid-template-columns: 1fr 1fr; }
+  .compare-grid, .two-col, .proj-row { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 28px; }
+  .hero-stats { flex-wrap: wrap; gap: 20px; }
+  .content { padding: 24px 20px; }
+  .hero, .topbar { padding-left: 20px; padding-right: 20px; }
+}
+
+@media (max-width: 560px) {
+  .role-grid, .app-grid, .summary-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-logo">DS</div>
+    <div>
+      <div class="brand-name">DataScience Notes</div>
+      <div class="brand-sub">Statistics Series — by a 20yr DS Pro</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="tag tag-orange">Topic 01 / N</span>
+    <span class="tag tag-blue">Foundation</span>
+    <span class="tag tag-green">~15 min</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="chapter-label">Chapter 01 · Statistics Series</div>
+  <h1>Introduction to <span>Statistics</span></h1>
+  <div class="hero-sub">The language every Data Scientist must speak fluently — before you touch any model, any code, any algorithm.</div>
+  <div class="hero-stats">
+    <div class="hstat">
+      <div class="val">4</div>
+      <div class="lbl">Core Topics</div>
+    </div>
+    <div class="hstat">
+      <div class="val">3</div>
+      <div class="lbl">Real Projects</div>
+    </div>
+    <div class="hstat">
+      <div class="val">6</div>
+      <div class="lbl">Industry Examples</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- §1 WHAT IS STATISTICS -->
+  <div class="section-head">
+    <div class="sec-num">§1</div>
+    <div class="sec-title">What is Statistics?</div>
+  </div>
+
+  <div class="card">
+    <p>Statistics is the science of <strong>collecting, organizing, analyzing, and interpreting data</strong> to make decisions. That's the textbook definition. But let me tell you what it actually means when you're sitting in front of 10 million rows of messy real-world data:</p>
+    <br>
+    <p>Statistics is the tool that tells you <strong>what's actually happening</strong> — not what you think is happening, not what the business assumes is happening — what the data <em>actually</em> says.</p>
+  </div>
+
+  <div class="def-card">
+    <p>Statistics = Turning raw, messy, chaotic data into <strong>clear, trustworthy answers</strong> that drive real decisions. Nothing more. Nothing less.</p>
+  </div>
+
+  <div class="note-bar">
+    💬 "Without statistics, you're just another person with an opinion." — Something I've told every junior on my team for 20 years.
+  </div>
+
+  <div class="flow-wrap">
+    <p style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin-bottom:16px;">How Statistics Works in Practice</p>
+    <div class="flow">
+      <div class="flow-box">
+        <div class="fb-step">Start</div>
+        <div class="fb-label">Raw Data</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">
+        <div class="fb-step">Step 1</div>
+        <div class="fb-label">Collect & Clean</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">
+        <div class="fb-step">Step 2</div>
+        <div class="fb-label">Organize</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">
+        <div class="fb-step">Step 3</div>
+        <div class="fb-label">Analyze (Stats)</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">
+        <div class="fb-step">Output</div>
+        <div class="fb-label">Decision ✓</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- §2 WHY STATISTICS -->
+  <div class="section-head">
+    <div class="sec-num">§2</div>
+    <div class="sec-title">Why Statistics in Data Science?</div>
+  </div>
+
+  <div class="card">
+    <p>A lot of people jump straight to Machine Learning — neural networks, XGBoost, GPT wrappers. I get it, that stuff looks exciting. But here's the truth from 20 years in the field:</p>
+    <br>
+    <p><strong>Most real-world DS problems are solved with statistics, not deep learning.</strong> ML is a power tool. Statistics is the foundation the tool stands on. Without it, you're building on sand.</p>
+  </div>
+
+  <div class="role-grid">
+    <div class="role-card">
+      <div class="role-num">01</div>
+      <h3>🔍 Understanding Your Data</h3>
+      <p>Before touching any model — you need to know what your data looks like. Is it skewed? Are there outliers? What's the spread? These are all stat questions.</p>
+      <div class="role-eg">
+        <strong>Example:</strong> Building a fraud detection model. First stat question — what % of transactions are actually fraud? Turns out it's 0.1%. Now your entire approach changes. Statistics told you this before writing a single line of model code.
+      </div>
+    </div>
+    <div class="role-card">
+      <div class="role-num">02</div>
+      <h3>🧪 Testing Your Assumptions</h3>
+      <p>Did the new feature improve revenue? Or is it random chance? You can't trust gut feel. You need statistical tests to confirm or reject what you believe.</p>
+      <div class="role-eg">
+        <strong>Example:</strong> Product team says "new checkout button increased conversions by 5%." Statistics (A/B testing + p-value) will confirm if this is real signal or just noise.
+      </div>
+    </div>
+    <div class="role-card">
+      <div class="role-num">03</div>
+      <h3>📊 Making ML Actually Work</h3>
+      <p>Every ML algorithm has statistical assumptions underneath. If you don't know them, your models fail silently and you don't even know why.</p>
+      <div class="role-eg">
+        <strong>Example:</strong> Your model shows 95% accuracy. But 95% of your data is one class. The model learned nothing. This is the accuracy paradox — pure statistics catches it.
+      </div>
+    </div>
+  </div>
+
+  <div class="project-block">
+    <div class="proj-label">⚡ Real Project · Fraud Detection · Banking</div>
+    <h3>Credit Card Default Prediction — HDFC Style Problem</h3>
+    <p>A bank wanted to predict which customers would default next month. 50,000 customer records. Classic DS problem — but statistics did the heavy lifting before any model was built.</p>
+    <div class="proj-row">
+      <div>
+        <div class="proj-col-title col-desc">Descriptive Stats Used</div>
+        <div class="proj-point">Average credit utilization = 67% for defaulters vs 34% for non-defaulters</div>
+        <div class="proj-point">80% of defaulters missed 2+ payments in last 6 months</div>
+        <div class="proj-point">These two stats alone gave us the top features — before any ML</div>
+      </div>
+      <div>
+        <div class="proj-col-title col-inf">Inferential Stats Used</div>
+        <div class="proj-point">50K customers = sample. Bank has 2M customers total</div>
+        <div class="proj-point">Used inferential model: "With 95% confidence, utilization > 80% means 3.2x higher default risk"</div>
+        <div class="proj-point">That conclusion now applies to all 2 million customers</div>
+      </div>
+    </div>
+    <div class="proj-result">💰 Result: Reduced bad loan approvals by 18% — ₹12 crore saved in first year. Stats drove this, not ML.</div>
+  </div>
+
+  <!-- §3 DESCRIPTIVE VS INFERENTIAL -->
+  <div class="section-head">
+    <div class="sec-num">§3</div>
+    <div class="sec-title">Descriptive vs Inferential Statistics</div>
+  </div>
+
+  <div class="card">
+    <p>This is the most fundamental split in all of statistics. Once you <em>truly</em> understand this difference, everything else falls into place — hypothesis testing, confidence intervals, p-values — it all becomes obvious.</p>
+  </div>
+
+  <div class="compare-grid">
+    <div class="cmp-card desc">
+      <div class="cmp-type">Type 01</div>
+      <h3>📋 Descriptive Statistics</h3>
+      <div class="question">Core Question: "What does my current data look like?"</div>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px; line-height:1.6;">Describes and summarizes the data you already have. It doesn't go beyond the data — no predictions, no generalizations. Just: here's what I see.</p>
+      <div class="pill-list">
+        <span class="pill">Mean / Median / Mode</span>
+        <span class="pill">Standard Deviation</span>
+        <span class="pill">Min / Max / Range</span>
+        <span class="pill">Percentiles</span>
+        <span class="pill">Histograms</span>
+        <span class="pill">Box Plots</span>
+      </div>
+      <div class="cmp-eg">📌 You survey 500 customers. Average age = 34 years. That's descriptive — you're just describing those 500 people, nothing more.</div>
+    </div>
+    <div class="cmp-card inf">
+      <div class="cmp-type">Type 02</div>
+      <h3>🔮 Inferential Statistics</h3>
+      <div class="question">Core Question: "What can I conclude about the bigger world?"</div>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px; line-height:1.6;">Takes a small sample and draws conclusions about the larger population. You're making educated guesses backed by probability and math — that's the power.</p>
+      <div class="pill-list">
+        <span class="pill">Hypothesis Testing</span>
+        <span class="pill">Confidence Intervals</span>
+        <span class="pill">P-values</span>
+        <span class="pill">Regression</span>
+        <span class="pill">ANOVA</span>
+        <span class="pill">Chi-Square</span>
+      </div>
+      <div class="cmp-eg">📌 Those 500 customers represent 5 million. You infer: "Our entire user base is probably aged 34 ± 2 years, with 95% confidence." That's inferential.</div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-icon">💡</div>
+    <p><strong>Simple way to remember:</strong> Descriptive = looking in a mirror (what do I see right now, exactly as it is). Inferential = looking through a window (what can I guess about the world outside from the limited view I have).</p>
+  </div>
+
+  <div class="project-block">
+    <div class="proj-label">⚡ Real Project · Demand Forecasting · Retail</div>
+    <h3>200-Store Retail Chain — Inventory Optimization (India)</h3>
+    <p>The client had 200+ stores across India. Problem: they were either overstocking (wasted money sitting on shelves) or understocking (lost sales, angry customers). Classic problem. Statistics solved it.</p>
+    <div class="proj-row">
+      <div>
+        <div class="proj-col-title col-desc">Descriptive Stats Used</div>
+        <div class="proj-point">Analyzed 3 years of historical sales data — found 40% spike in festive months (Oct–Nov)</div>
+        <div class="proj-point">Category-level patterns: electronics peak in Dec, clothing in wedding season</div>
+        <div class="proj-point">Store-wise variance: 3 stores drove 22% of total revenue (Pareto insight)</div>
+      </div>
+      <div>
+        <div class="proj-col-title col-inf">Inferential Stats Used</div>
+        <div class="proj-point">Built time-series statistical model (ARIMA) — forecast demand for next 90 days</div>
+        <div class="proj-point">Added 95% confidence intervals — "expect between 1,200–1,600 units of product X"</div>
+        <div class="proj-point">Inferred demand from sample stores to all 200 stores in same tier</div>
+      </div>
+    </div>
+    <div class="proj-result">💰 Result: Overstock reduced by 23%, lost sales cut by 31% — ₹4 crore saved annually. ML model tried later but didn't beat this statistical approach.</div>
+  </div>
+
+  <!-- §4 APPLICATIONS -->
+  <div class="section-head">
+    <div class="sec-num">§4</div>
+    <div class="sec-title">Real World Applications</div>
+  </div>
+
+  <div class="card">
+    <p>Statistics isn't academic — it's running quietly behind almost every product you use daily. Here's where I've personally seen it deployed across industries in my career:</p>
+  </div>
+
+  <div class="app-grid">
+    <div class="app-card">
+      <div class="app-domain">E-Commerce</div>
+      <span class="app-icon">🛒</span>
+      <h4>Amazon Recommendations</h4>
+      <p>Uses statistical correlation between products. "Customers who bought X also bought Y" — co-occurrence statistics on hundreds of millions of orders, running in real time.</p>
+    </div>
+    <div class="app-card">
+      <div class="app-domain">Healthcare</div>
+      <span class="app-icon">💊</span>
+      <h4>Drug Trial Approvals</h4>
+      <p>Clinical trials use inferential stats to determine if a drug actually works or if improvement is random chance. FDA requires p-value &lt; 0.05 before any drug goes to market.</p>
+    </div>
+    <div class="app-card">
+      <div class="app-domain">Banking & Finance</div>
+      <span class="app-icon">🏦</span>
+      <h4>Risk & Loan Modeling</h4>
+      <p>Banks use Value at Risk (VaR): "With 99% confidence, we won't lose more than ₹50 crore tomorrow." Every single loan approval uses a statistical risk score.</p>
+    </div>
+    <div class="app-card">
+      <div class="app-domain">Tech Product</div>
+      <span class="app-icon">⚡</span>
+      <h4>A/B Testing at Scale</h4>
+      <p>Netflix, Spotify, Swiggy — they A/B test every UI change. Statistics tells them if a new button color actually increases clicks or if it's random noise across 50 million users.</p>
+    </div>
+    <div class="app-card">
+      <div class="app-domain">Sports Analytics</div>
+      <span class="app-icon">🏏</span>
+      <h4>IPL Player Selection</h4>
+      <p>IPL teams use stats to evaluate performance, predict injury risk, and optimize playing XI. Moneyball approach — find undervalued players through statistics that scouts miss.</p>
+    </div>
+    <div class="app-card">
+      <div class="app-domain">Social Media</div>
+      <span class="app-icon">📱</span>
+      <h4>Feed Ranking Algorithm</h4>
+      <p>Instagram's algorithm predicts: "What's the probability this user engages with this post?" Highest probability posts rank higher. Millions of such calculations every second.</p>
+    </div>
+  </div>
+
+  <div class="note-bar warm">
+    🔑 The key realization after 20 years: <strong>Statistics makes you ask better questions.</strong> And in data science, asking the right question is honestly 50% of the entire job. The other 50% is the math to answer it.
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary">
+    <div class="summary-head">Chapter Summary</div>
+    <h2>What you must take away from this chapter ↓</h2>
+    <div class="summary-grid">
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>Statistics is not optional.</strong> It's the foundation — ML, AI, DL all stand on top of it. Skip this and your models will fail silently.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>Descriptive stats = mirror.</strong> Summarizes the data you have. Mean, median, std, histograms. Tells you "what is."</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>Inferential stats = window.</strong> Makes conclusions about a larger population from a small sample. Confidence intervals, p-values, hypothesis tests.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>Statistics solves real problems.</strong> Fraud detection, demand forecasting, drug trials, A/B tests — all statistics, not always ML.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>It's everywhere.</strong> Amazon, Netflix, IPL, Banks, Hospitals — statistics is running silently behind every product you use.</p>
+      </div>
+      <div class="sum-item">
+        <div class="sum-dot"></div>
+        <p><strong>Ask better questions.</strong> Statistics doesn't just give answers — it teaches you to ask the right questions. That's the real skill.</p>
+      </div>
+    </div>
+    <div class="next-topic">
+      <p>Completed: Chapter 01 · Introduction to Statistics</p>
+      <div class="next-btn">Next: Types of Data & Variables →</div>
+    </div>
+  </div>
+
+</div><!-- end content -->
+
+</body>
+</html>
