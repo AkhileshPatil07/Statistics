@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probability & Bayes' Theorem — Complete Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #f4f1ec;
+    --bg2:       #edeae3;
+    --surface:   #ffffff;
+    --surface2:  #f9f7f3;
+    --border:    #ddd8cf;
+    --border2:   #cbc5bb;
+    --text:      #2c2825;
+    --text2:     #5a534c;
+    --muted:     #8c837a;
+    --teal:      #2a7f72;
+    --teal-lt:   #d8efec;
+    --amber:     #b5661f;
+    --amber-lt:  #fbecd8;
+    --indigo:    #3d4fa0;
+    --indigo-lt: #e0e4f5;
+    --rose:      #a03050;
+    --rose-lt:   #f5e0e5;
+    --green:     #3a7d44;
+    --green-lt:  #dff0e3;
+    --shadow:    0 2px 12px rgba(44,40,37,0.08);
+    --shadow-md: 0 4px 24px rgba(44,40,37,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-size: 15.5px;
+    line-height: 1.75;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--surface);
+    border-bottom: 3px solid var(--teal);
+    padding: 52px 40px 44px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--indigo), var(--teal), var(--amber), var(--rose));
+  }
+  .chip {
+    display: inline-block;
+    background: var(--teal-lt);
+    color: var(--teal);
+    border: 1px solid #b0d9d4;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  header h1 {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+  header h1 span { color: var(--teal); }
+  header p {
+    color: var(--text2);
+    font-size: 1rem;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 30px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(44,40,37,0.06);
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    padding: 13px 18px;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  nav a:hover { color: var(--teal); border-bottom-color: var(--teal); }
+
+  /* ─── MAIN ─── */
+  main {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ─── SECTION ─── */
+  .section { margin-bottom: 64px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .sec-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: var(--teal);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 4px;
+  }
+  .sec-tag.amber { background: var(--amber); }
+  .sec-tag.indigo { background: var(--indigo); }
+  .sec-tag.rose { background: var(--rose); }
+  .sec-tag.green { background: var(--green); }
+
+  .section-header h2 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+
+  /* ─── CARD ─── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 30px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 5px; height: 100%;
+    border-radius: 14px 0 0 14px;
+  }
+  .card.teal::before { background: var(--teal); }
+  .card.amber::before { background: var(--amber); }
+  .card.indigo::before { background: var(--indigo); }
+  .card.rose::before { background: var(--rose); }
+  .card.green::before { background: var(--green); }
+
+  .card h3 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card p { color: var(--text2); margin-bottom: 12px; font-size: 0.97rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { padding-left: 20px; color: var(--text2); }
+  .card ul li { margin-bottom: 6px; font-size: 0.95rem; }
+  .card ul li strong { color: var(--text); }
+
+  /* ─── FORMULA BOX ─── */
+  .formula {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.93rem;
+    color: var(--indigo);
+    line-height: 2;
+  }
+  .formula .label {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+  }
+  .formula .hl { color: var(--teal); font-weight: 600; }
+  .formula .hl-amber { color: var(--amber); font-weight: 600; }
+  .formula .hl-rose { color: var(--rose); font-weight: 600; }
+
+  /* ─── EXAMPLE BOX ─── */
+  .example {
+    background: var(--green-lt);
+    border: 1px solid #b5d9be;
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 14px 0;
+  }
+  .example .ex-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--green);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .example p { color: #2d5c35; font-size: 0.94rem; margin-bottom: 8px; }
+  .example .data-line {
+    background: white;
+    border: 1px solid #b5d9be;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88rem;
+    color: var(--green);
+    margin: 8px 0;
+  }
+  .example p:last-child { margin-bottom: 0; }
+
+  /* ─── STEPS ─── */
+  .steps { margin: 14px 0; }
+  .step {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .step-n {
+    min-width: 26px;
+    height: 26px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .step-n.amber { background: var(--amber); }
+  .step-n.indigo { background: var(--indigo); }
+  .step-n.rose { background: var(--rose); }
+  .step p { color: var(--text2); font-size: 0.94rem; margin: 0; }
+  .step p strong { color: var(--text); }
+
+  /* ─── INFO GRID ─── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 14px 0; }
+  @media(max-width:680px) { .grid2,.grid3 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .mini-card h4 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 7px;
+  }
+  .mini-card h4.teal { color: var(--teal); }
+  .mini-card h4.amber { color: var(--amber); }
+  .mini-card h4.indigo { color: var(--indigo); }
+  .mini-card h4.rose { color: var(--rose); }
+  .mini-card h4.green { color: var(--green); }
+  .mini-card p { color: var(--text2); font-size: 0.88rem; margin: 0; line-height: 1.6; }
+
+  /* ─── TABLE ─── */
+  .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 0.88rem;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .tbl th {
+    background: var(--bg2);
+    color: var(--text);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 11px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--border2);
+  }
+  .tbl td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: top;
+  }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl tr:hover td { background: var(--bg2); color: var(--text); }
+  .tbl td:first-child { font-weight: 700; color: var(--text); }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 0.93rem;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .callout.info { background: var(--indigo-lt); border-left: 4px solid var(--indigo); }
+  .callout.tip  { background: var(--teal-lt);   border-left: 4px solid var(--teal); }
+  .callout.warn { background: var(--amber-lt);  border-left: 4px solid var(--amber); }
+  .callout.ds   { background: var(--rose-lt);   border-left: 4px solid var(--rose); }
+  .callout-icon { font-size: 1.1rem; margin-top: 1px; flex-shrink: 0; }
+  .callout p { color: var(--text2); margin: 0; font-size: 0.9rem; }
+  .callout p strong { color: var(--text); }
+
+  /* ─── APP BOX ─── */
+  .app-box {
+    background: var(--amber-lt);
+    border: 1px solid #e8c9a0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 14px 0;
+  }
+  .app-box .app-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .app-box ul { list-style: none; padding: 0; }
+  .app-box ul li {
+    color: var(--text2);
+    font-size: 0.91rem;
+    padding: 4px 0;
+    padding-left: 20px;
+    position: relative;
+  }
+  .app-box ul li::before { content: '▸'; position: absolute; left: 0; color: var(--amber); }
+  .app-box ul li strong { color: var(--text); }
+
+  /* ─── BADGE ─── */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+  }
+  .badge.teal   { background: var(--teal-lt);   color: var(--teal);   border: 1px solid #b0d9d4; }
+  .badge.amber  { background: var(--amber-lt);  color: var(--amber);  border: 1px solid #e8c9a0; }
+  .badge.indigo { background: var(--indigo-lt); color: var(--indigo); border: 1px solid #c0c8e8; }
+  .badge.rose   { background: var(--rose-lt);   color: var(--rose);   border: 1px solid #e0b0c0; }
+  .badge.green  { background: var(--green-lt);  color: var(--green);  border: 1px solid #b5d9be; }
+
+  /* ─── SVG CHARTS ─── */
+  .chart-wrap {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    margin: 16px 0;
+    overflow-x: auto;
+  }
+  .chart-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  /* ─── CODE ─── */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    color: var(--teal);
+  }
+
+  /* ─── DIVIDER ─── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+  /* ─── BAYES VISUAL ─── */
+  .bayes-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    padding: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .bayes-box {
+    background: var(--surface);
+    border: 2px solid var(--border2);
+    border-radius: 10px;
+    padding: 14px 20px;
+    text-align: center;
+    min-width: 120px;
+  }
+  .bayes-box .b-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .bayes-box .b-name {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .bayes-box.prior .b-name { color: var(--indigo); }
+  .bayes-box.likelihood .b-name { color: var(--teal); }
+  .bayes-box.posterior .b-name { color: var(--rose); }
+  .bayes-box.norm .b-name { color: var(--amber); }
+  .bayes-box .b-sub { font-size: 0.78rem; color: var(--text2); margin-top: 3px; }
+  .arrow {
+    font-size: 1.4rem;
+    color: var(--border2);
+    padding: 0 8px;
+  }
+
+  /* ─── PROBABILITY SCALE ─── */
+  .prob-scale {
+    position: relative;
+    height: 54px;
+    margin: 20px 0 8px;
+  }
+  .prob-track {
+    position: absolute;
+    top: 20px;
+    left: 20px; right: 20px;
+    height: 10px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #e74c3c 0%, #e67e22 25%, #f1c40f 50%, #2ecc71 75%, #27ae60 100%);
+  }
+  .prob-tick {
+    position: absolute;
+    top: 10px;
+    transform: translateX(-50%);
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text2);
+  }
+  .prob-tick::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 10px;
+    background: var(--border2);
+    margin: 4px auto;
+  }
+  .prob-label {
+    position: absolute;
+    top: 36px;
+    font-size: 0.7rem;
+    color: var(--muted);
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center;
+    padding: 28px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 7px; height: 7px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* ─── HIGHLIGHT TEXT COLORS ─── */
+  .ht { color: var(--teal); font-weight: 700; }
+  .ha { color: var(--amber); font-weight: 700; }
+  .hi { color: var(--indigo); font-weight: 700; }
+  .hr-c { color: var(--rose); font-weight: 700; }
+  .hg { color: var(--green); font-weight: 700; }
+
+  /* ─── ANIMATION ─── */
+  .card, .section { animation: rise 0.5s ease both; }
+  @keyframes rise {
+    from { opacity:0; transform: translateY(16px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  .card:nth-child(2) { animation-delay: 0.07s; }
+  .card:nth-child(3) { animation-delay: 0.14s; }
+  .card:nth-child(4) { animation-delay: 0.21s; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header>
+  <div class="chip">Statistics × Data Science</div>
+  <h1>Probability &amp; <span>Bayes' Theorem</span></h1>
+  <p>Topics 8–11 explained line by line — with formulas, worked examples, and real-world AI/ML applications.</p>
+</header>
+
+<nav>
+  <a href="#prob-intro">§8 Probability Intro</a>
+  <a href="#prob-rules">§9 Probability Rules</a>
+  <a href="#counting">§10 Counting Methods</a>
+  <a href="#bayes">§11 Bayes' Theorem</a>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════
+     SECTION 8 — INTRODUCTION TO PROBABILITY
+════════════════════════════════════════ -->
+<div class="section" id="prob-intro">
+  <div class="section-header">
+    <span class="sec-tag">§ 08</span>
+    <h2>Introduction to Probability</h2>
+  </div>
+
+  <!-- 8.1 What is Probability? -->
+  <div class="card teal">
+    <h3>📌 8.1 — What is Probability?</h3>
+
+    <p>Probability is the <strong>measure of how likely an event is to occur</strong>. It is a number between 0 and 1 (or 0% to 100%) that tells us how certain or uncertain something is.</p>
+
+    <p>Think of it as a scale of belief — from "definitely won't happen" (0) to "definitely will happen" (1). Everything uncertain lives somewhere in between.</p>
+
+    <div class="formula">
+      <div class="label">Core Formula</div>
+      <span class="hl">P(A)</span> = (Number of favorable outcomes) / (Total number of possible outcomes)<br><br>
+      <span class="hl">P(A)</span> is always: &nbsp; 0 ≤ P(A) ≤ 1
+    </div>
+
+    <!-- Probability Scale Visual -->
+    <div class="chart-wrap">
+      <div class="chart-title">Probability Scale — 0 to 1</div>
+      <svg viewBox="0 0 640 80" width="100%" style="max-width:640px;">
+        <!-- Track gradient -->
+        <defs>
+          <linearGradient id="pg" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%"   stop-color="#e74c3c"/>
+            <stop offset="25%"  stop-color="#e67e22"/>
+            <stop offset="50%"  stop-color="#f1c40f"/>
+            <stop offset="75%"  stop-color="#2ecc71"/>
+            <stop offset="100%" stop-color="#27ae60"/>
+          </linearGradient>
+        </defs>
+        <rect x="30" y="28" width="580" height="12" rx="6" fill="url(#pg)"/>
+
+        <!-- Ticks -->
+        <line x1="30"  y1="22" x2="30"  y2="40" stroke="#aaa" stroke-width="1.5"/>
+        <line x1="175" y1="22" x2="175" y2="40" stroke="#aaa" stroke-width="1.5"/>
+        <line x1="320" y1="22" x2="320" y2="40" stroke="#aaa" stroke-width="1.5"/>
+        <line x1="465" y1="22" x2="465" y2="40" stroke="#aaa" stroke-width="1.5"/>
+        <line x1="610" y1="22" x2="610" y2="40" stroke="#aaa" stroke-width="1.5"/>
+
+        <!-- Values -->
+        <text x="30"  y="16" fill="#5a534c" font-family="JetBrains Mono" font-size="11" text-anchor="middle">0</text>
+        <text x="175" y="16" fill="#5a534c" font-family="JetBrains Mono" font-size="11" text-anchor="middle">0.25</text>
+        <text x="320" y="16" fill="#5a534c" font-family="JetBrains Mono" font-size="11" text-anchor="middle">0.5</text>
+        <text x="465" y="16" fill="#5a534c" font-family="JetBrains Mono" font-size="11" text-anchor="middle">0.75</text>
+        <text x="610" y="16" fill="#5a534c" font-family="JetBrains Mono" font-size="11" text-anchor="middle">1</text>
+
+        <!-- Labels -->
+        <text x="30"  y="62" fill="#e74c3c" font-family="Nunito" font-size="10" text-anchor="middle">Impossible</text>
+        <text x="175" y="62" fill="#e67e22" font-family="Nunito" font-size="10" text-anchor="middle">Unlikely</text>
+        <text x="320" y="62" fill="#b58a00" font-family="Nunito" font-size="10" text-anchor="middle">Even chance</text>
+        <text x="465" y="62" fill="#27ae60" font-family="Nunito" font-size="10" text-anchor="middle">Likely</text>
+        <text x="610" y="62" fill="#27ae60" font-family="Nunito" font-size="10" text-anchor="middle">Certain</text>
+      </svg>
+    </div>
+
+    <div class="example">
+      <div class="ex-tag">📐 Worked Example — Coin Toss</div>
+      <p>When you flip a fair coin, there are <strong>2 equally likely outcomes</strong>: Heads or Tails.</p>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><p>Total outcomes = {Heads, Tails} → <strong>2</strong></p></div>
+        <div class="step"><div class="step-n">2</div><p>Favorable outcomes for "Heads" = {Heads} → <strong>1</strong></p></div>
+        <div class="step"><div class="step-n">3</div><p><strong>P(Heads)</strong> = 1/2 = <strong>0.5</strong> = 50%</p></div>
+        <div class="step"><div class="step-n">4</div><p><strong>P(Tails)</strong> = 1/2 = 0.5 → Both together = 1 (certainty that <em>some</em> outcome occurs)</p></div>
+      </div>
+    </div>
+
+    <div class="app-box">
+      <div class="app-tag">📊 Data Science Applications</div>
+      <ul>
+        <li><strong>Model Confidence:</strong> Every ML classifier outputs a probability (e.g., "This email is spam with P = 0.93"). Decision boundary is usually set at 0.5.</li>
+        <li><strong>Risk Scoring:</strong> Credit models assign P(default) to each loan applicant. Banks use this to approve/reject loans.</li>
+        <li><strong>A/B Testing:</strong> Statistical significance is expressed as probability. "p-value = 0.03" means only 3% chance results are due to randomness.</li>
+        <li><strong>Reinforcement Learning:</strong> Agents choose actions based on probability distributions over possible rewards.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 8.2 Sample Space & Events -->
+  <div class="card amber">
+    <h3>🎯 8.2 — Sample Space and Events</h3>
+
+    <p>Before calculating any probability, we must define the universe of all possibilities.</p>
+
+    <div class="grid2">
+      <div class="mini-card">
+        <h4 class="indigo">Sample Space (S or Ω)</h4>
+        <p>The <strong>complete set of ALL possible outcomes</strong> of an experiment. It is the universe of everything that can happen. Denoted as S or Ω (Omega).</p>
+        <p style="margin-top:8px;"><em>Die roll:</em> S = {1, 2, 3, 4, 5, 6}</p>
+      </div>
+      <div class="mini-card">
+        <h4 class="rose">Event (A, B, C…)</h4>
+        <p>An event is any <strong>subset of the sample space</strong>. It is the specific outcome or collection of outcomes we are interested in. Can be one outcome or many.</p>
+        <p style="margin-top:8px;"><em>Even number:</em> A = {2, 4, 6}</p>
+      </div>
+    </div>
+
+    <div class="example">
+      <div class="ex-tag">📐 Worked Example — Rolling Two Dice</div>
+      <p><strong>Experiment:</strong> Roll 2 dice and find P(sum = 7)</p>
+      <div class="data-line">S = {(1,1),(1,2),...,(6,6)} → Total outcomes = 6 × 6 = 36</div>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><p><strong>Event A = sum of 7:</strong> {(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)} → <strong>6 outcomes</strong></p></div>
+        <div class="step"><div class="step-n">2</div><p><strong>P(sum=7)</strong> = 6/36 = <strong>1/6 ≈ 0.167</strong></p></div>
+        <div class="step"><div class="step-n">3</div><p>7 is the most probable sum when rolling two dice — this is why 7 is the most common result in board games like Monopoly.</p></div>
+      </div>
+    </div>
+
+    <!-- Dice visual -->
+    <div class="chart-wrap">
+      <div class="chart-title">Visual — Sum Frequencies for Two Dice (Total Outcomes = 36)</div>
+      <svg viewBox="0 0 620 140" width="100%" style="max-width:620px;">
+        <!-- Axes -->
+        <line x1="40" y1="100" x2="600" y2="100" stroke="#cbc5bb" stroke-width="1.5"/>
+        <line x1="40" y1="10" x2="40" y2="100" stroke="#cbc5bb" stroke-width="1.5"/>
+
+        <!-- Bars (sums 2-12, counts: 1,2,3,4,5,6,5,4,3,2,1) -->
+        <!-- bar width=46, gap=4, start x=46 -->
+        <!-- Heights scaled: max=6 → 80px, each unit=13.3px -->
+        <rect x="46"  y="87" width="42" height="13" fill="#ddd8cf" rx="2"/><!-- 2: 1 -->
+        <rect x="96"  y="74" width="42" height="26" fill="#cbc5bb" rx="2"/><!-- 3: 2 -->
+        <rect x="146" y="61" width="42" height="39" fill="#b0d9d4" rx="2"/><!-- 4: 3 -->
+        <rect x="196" y="48" width="42" height="52" fill="#7dc4bc" rx="2"/><!-- 5: 4 -->
+        <rect x="246" y="35" width="42" height="65" fill="#3aada2" rx="2"/><!-- 6: 5 -->
+        <rect x="296" y="22" width="42" height="78" fill="#2a7f72" rx="2"/><!-- 7: 6 ← peak -->
+        <rect x="346" y="35" width="42" height="65" fill="#3aada2" rx="2"/><!-- 8: 5 -->
+        <rect x="396" y="48" width="42" height="52" fill="#7dc4bc" rx="2"/><!-- 9: 4 -->
+        <rect x="446" y="61" width="42" height="39" fill="#b0d9d4" rx="2"/><!-- 10:3 -->
+        <rect x="496" y="74" width="42" height="26" fill="#cbc5bb" rx="2"/><!-- 11:2 -->
+        <rect x="546" y="87" width="42" height="13" fill="#ddd8cf" rx="2"/><!-- 12:1 -->
+
+        <!-- Count labels on top of bars -->
+        <text x="67"  y="84" fill="#5a534c" font-family="JetBrains Mono" font-size="9" text-anchor="middle">1</text>
+        <text x="117" y="71" fill="#5a534c" font-family="JetBrains Mono" font-size="9" text-anchor="middle">2</text>
+        <text x="167" y="58" fill="#5a534c" font-family="JetBrains Mono" font-size="9" text-anchor="middle">3</text>
+        <text x="217" y="45" fill="#5a534c" font-family="JetBrains Mono" font-size="9" text-anchor="middle">4</text>
+        <text x="267" y="32" fill="#5a534c" font-family="JetBrains Mono" font-size="9" text-anchor="middle">5</text>
+        <text x="317" y="19" fill="white"   font-family="JetBrains Mono" font-size="9" text-anchor="middle" font-weight="bold">6★</text>
+        <text x="367" y="32" fill="#5a534c" font-family="JetBrains Mono" font-size="9" text-anchor="middle">5</text>
+        <text x="417" y="45" fill="#5a534c" font-family="JetBrains Mono" font-size="9" text-anchor="middle">4</text>
+        <text x="467" y="58" fill="#5a534c" font-family="JetBrains Mono" font-size="9" text-anchor="middle">3</text>
+        <text x="517" y="71" fill="#5a534c" font-family="JetBrains Mono" font-size="9" text-anchor="middle">2</text>
+        <text x="567" y="84" fill="#5a534c" font-family="JetBrains Mono" font-size="9" text-anchor="middle">1</text>
+
+        <!-- X labels -->
+        <text x="67"  y="113" fill="#8c837a" font-family="Nunito" font-size="9" text-anchor="middle">2</text>
+        <text x="117" y="113" fill="#8c837a" font-family="Nunito" font-size="9" text-anchor="middle">3</text>
+        <text x="167" y="113" fill="#8c837a" font-family="Nunito" font-size="9" text-anchor="middle">4</text>
+        <text x="217" y="113" fill="#8c837a" font-family="Nunito" font-size="9" text-anchor="middle">5</text>
+        <text x="267" y="113" fill="#8c837a" font-family="Nunito" font-size="9" text-anchor="middle">6</text>
+        <text x="317" y="113" fill="#2a7f72" font-family="Nunito" font-size="9" text-anchor="middle" font-weight="bold">7</text>
+        <text x="367" y="113" fill="#8c837a" font-family="Nunito" font-size="9" text-anchor="middle">8</text>
+        <text x="417" y="113" fill="#8c837a" font-family="Nunito" font-size="9" text-anchor="middle">9</text>
+        <text x="467" y="113" fill="#8c837a" font-family="Nunito" font-size="9" text-anchor="middle">10</text>
+        <text x="517" y="113" fill="#8c837a" font-family="Nunito" font-size="9" text-anchor="middle">11</text>
+        <text x="567" y="113" fill="#8c837a" font-family="Nunito" font-size="9" text-anchor="middle">12</text>
+        <text x="320" y="130" fill="#8c837a" font-family="Nunito" font-size="9" text-anchor="middle">Sum of Two Dice</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 8.3 Types of Probability -->
+  <div class="card indigo">
+    <h3>🔬 8.3 — Types of Probability</h3>
+    <p>There are three approaches to assigning probability values, each used in different situations:</p>
+
+    <div class="grid3">
+      <div class="mini-card">
+        <h4 class="indigo">1. Classical Probability</h4>
+        <p>Based on <strong>logical reasoning</strong> and symmetry. Assumes all outcomes are <em>equally likely</em>. No experiment needed — just counting.</p>
+        <p style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--indigo);">P(A) = Favorable / Total</p>
+        <p style="margin-top:6px;"><em>Example:</em> P(King from deck) = 4/52 = 1/13</p>
+      </div>
+      <div class="mini-card">
+        <h4 class="teal">2. Empirical Probability</h4>
+        <p>Based on <strong>observed data / experiments</strong>. You actually run the experiment many times and count frequencies. More realistic for real-world data.</p>
+        <p style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--teal);">P(A) = Freq of A / Total trials</p>
+        <p style="margin-top:6px;"><em>Example:</em> Out of 1000 emails, 230 were spam → P(spam) = 0.23</p>
+      </div>
+      <div class="mini-card">
+        <h4 class="amber">3. Subjective Probability</h4>
+        <p>Based on <strong>personal belief, expert judgment, or intuition</strong>. No formula. Used when data is scarce or events are unique. Basis of Bayesian statistics.</p>
+        <p style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--amber);">P(A) = Expert's belief (0–1)</p>
+        <p style="margin-top:6px;"><em>Example:</em> A doctor estimates 70% chance a patient has a disease based on symptoms alone.</p>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">📌</span>
+      <p><strong>In Data Science:</strong> Empirical probability is used for model training (learning from data). Subjective probability is the foundation of Bayesian ML models — your prior belief gets updated as more data arrives.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 9 — PROBABILITY RULES
+════════════════════════════════════════ -->
+<div class="section" id="prob-rules">
+  <div class="section-header">
+    <span class="sec-tag amber">§ 09</span>
+    <h2>Probability Rules</h2>
+  </div>
+
+  <!-- 9.1 Complement Rule -->
+  <div class="card teal">
+    <h3>⟂ 9.1 — Complement Rule</h3>
+
+    <p>The complement of event A (written as <strong>A' or Aᶜ</strong>) is the event that A does <em>NOT</em> happen. Together, A and its complement cover the entire sample space — their probabilities must add up to 1.</p>
+
+    <div class="formula">
+      <div class="label">Complement Rule</div>
+      <span class="hl">P(Aᶜ)</span> = 1 − P(A)<br>
+      Or equivalently: &nbsp; <span class="hl">P(A)</span> + <span class="hl">P(Aᶜ)</span> = 1
+    </div>
+
+    <div class="example">
+      <div class="ex-tag">📐 Worked Example</div>
+      <p>In a dataset of 500 patients, 120 tested positive for diabetes.</p>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><p><strong>P(Positive)</strong> = 120/500 = <strong>0.24</strong></p></div>
+        <div class="step"><div class="step-n">2</div><p><strong>P(Not Positive)</strong> = 1 − 0.24 = <strong>0.76</strong></p></div>
+        <div class="step"><div class="step-n">3</div><p>Verify: 0.24 + 0.76 = 1.0 ✓</p></div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <span class="callout-icon">💡</span>
+      <p><strong>DS Use:</strong> "At least one" probability problems are always easier with complement: P(at least one fraud) = 1 − P(no fraud at all). Used constantly in hypothesis testing, ROC curve analysis, and error rate calculations.</p>
+    </div>
+  </div>
+
+  <!-- 9.2 Addition Rule -->
+  <div class="card amber">
+    <h3>➕ 9.2 — Addition Rule (OR)</h3>
+
+    <p>The addition rule finds the probability that <strong>at least one of two events occurs</strong> (event A OR event B).</p>
+
+    <div class="formula">
+      <div class="label">General Addition Rule (any events)</div>
+      <span class="hl">P(A ∪ B)</span> = P(A) + P(B) − P(A ∩ B)<br><br>
+      <span class="hl-amber">For Mutually Exclusive events</span> (A and B cannot both happen):<br>
+      <span class="hl">P(A ∪ B)</span> = P(A) + P(B) &nbsp;&nbsp; [because P(A ∩ B) = 0]
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Venn Diagram — Addition Rule</div>
+      <svg viewBox="0 0 500 160" width="100%" style="max-width:500px;">
+        <!-- Circle A -->
+        <circle cx="185" cy="80" r="70" fill="rgba(42,127,114,0.18)" stroke="#2a7f72" stroke-width="2"/>
+        <!-- Circle B -->
+        <circle cx="315" cy="80" r="70" fill="rgba(61,79,160,0.18)" stroke="#3d4fa0" stroke-width="2"/>
+        <!-- Overlap region -->
+        <path d="M 250 28 C 280 38 295 58 295 80 C 295 102 280 122 250 132 C 220 122 205 102 205 80 C 205 58 220 38 250 28 Z" fill="rgba(181,102,31,0.25)" stroke="none"/>
+        <!-- Labels -->
+        <text x="160" y="76" fill="#2a7f72" font-family="Nunito" font-size="13" font-weight="700" text-anchor="middle">A only</text>
+        <text x="160" y="94" fill="#2a7f72" font-family="JetBrains Mono" font-size="10" text-anchor="middle">P(A)</text>
+        <text x="340" y="76" fill="#3d4fa0" font-family="Nunito" font-size="13" font-weight="700" text-anchor="middle">B only</text>
+        <text x="340" y="94" fill="#3d4fa0" font-family="JetBrains Mono" font-size="10" text-anchor="middle">P(B)</text>
+        <text x="250" y="76" fill="#b5661f" font-family="Nunito" font-size="11" font-weight="700" text-anchor="middle">A ∩ B</text>
+        <text x="250" y="94" fill="#b5661f" font-family="JetBrains Mono" font-size="9" text-anchor="middle">subtract once</text>
+        <!-- Union label -->
+        <text x="250" y="145" fill="#5a534c" font-family="Nunito" font-size="11" text-anchor="middle">P(A∪B) = P(A) + P(B) − P(A∩B)</text>
+        <!-- S boundary -->
+        <rect x="20" y="5" width="460" height="140" rx="10" fill="none" stroke="#ddd8cf" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="30" y="20" fill="#cbc5bb" font-family="Nunito" font-size="11">S (Sample Space)</text>
+      </svg>
+    </div>
+
+    <div class="example">
+      <div class="ex-tag">📐 Worked Example — Card Draw</div>
+      <p>From a standard 52-card deck: P(drawing a Heart OR a King)?</p>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><p><strong>P(Heart)</strong> = 13/52 = 0.25</p></div>
+        <div class="step"><div class="step-n">2</div><p><strong>P(King)</strong> = 4/52 = 0.077</p></div>
+        <div class="step"><div class="step-n">3</div><p><strong>P(Heart AND King)</strong> = King of Hearts = 1/52 = 0.019</p></div>
+        <div class="step"><div class="step-n">4</div><p><strong>P(Heart OR King)</strong> = 0.25 + 0.077 − 0.019 = <strong>0.308 ≈ 30.8%</strong></p></div>
+        <div class="step"><div class="step-n">5</div><p>Why subtract? The King of Hearts was counted TWICE — once in Hearts, once in Kings. So we remove one overlap.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9.3 Multiplication Rule -->
+  <div class="card indigo">
+    <h3>✖️ 9.3 — Multiplication Rule (AND)</h3>
+
+    <p>The multiplication rule finds the probability that <strong>two events both occur</strong> (event A AND event B).</p>
+
+    <div class="formula">
+      <div class="label">General Multiplication Rule (dependent events)</div>
+      <span class="hl">P(A ∩ B)</span> = P(A) × P(B | A)<br><br>
+      <span class="hl-amber">For Independent events</span> (A does not affect B):<br>
+      <span class="hl">P(A ∩ B)</span> = P(A) × P(B)
+    </div>
+
+    <div class="example">
+      <div class="ex-tag">📐 Worked Example — Drawing Cards Without Replacement</div>
+      <p>P(drawing 2 Aces in a row) from a 52-card deck, <em>without replacement</em>:</p>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><p><strong>P(1st Ace)</strong> = 4/52 = 1/13</p></div>
+        <div class="step"><div class="step-n">2</div><p>After removing 1 Ace: 51 cards remain, 3 Aces remain.</p></div>
+        <div class="step"><div class="step-n">3</div><p><strong>P(2nd Ace | 1st was Ace)</strong> = 3/51 = 1/17</p></div>
+        <div class="step"><div class="step-n">4</div><p><strong>P(both Aces)</strong> = 1/13 × 1/17 = <strong>1/221 ≈ 0.0045 (0.45%)</strong></p></div>
+        <div class="step"><div class="step-n">5</div><p>These are <em>dependent events</em> — drawing the first Ace changes the probability of the second.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9.4 Conditional Probability -->
+  <div class="card rose">
+    <h3>🔗 9.4 — Conditional Probability P(A|B)</h3>
+
+    <p>Conditional probability asks: <strong>Given that B has already happened, what is the probability of A?</strong> The vertical bar "|" means "given that". It narrows our sample space from the entire S to just the event B.</p>
+
+    <div class="formula">
+      <div class="label">Conditional Probability Formula</div>
+      <span class="hl">P(A | B)</span> = P(A ∩ B) / P(B) &nbsp;&nbsp; [provided P(B) &gt; 0]<br><br>
+      Read as: "Probability of A <span class="hl-rose">given</span> B has occurred"
+    </div>
+
+    <div class="example">
+      <div class="ex-tag">📐 Worked Example — Medical Diagnosis</div>
+      <p><strong>Data:</strong> 1000 patients tested for a disease.</p>
+      <div class="data-line">
+        Sick + Test Positive: 90 | Sick + Test Negative: 10<br>
+        Healthy + Test Positive: 50 | Healthy + Test Negative: 850
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><p><strong>P(Sick)</strong> = 100/1000 = 0.10</p></div>
+        <div class="step"><div class="step-n">2</div><p><strong>P(Test+)</strong> = (90+50)/1000 = 140/1000 = 0.14</p></div>
+        <div class="step"><div class="step-n">3</div><p><strong>P(Sick AND Test+)</strong> = 90/1000 = 0.09</p></div>
+        <div class="step"><div class="step-n">4</div><p><strong>P(Sick | Test+)</strong> = 0.09 / 0.14 = <strong>0.643 (64.3%)</strong></p></div>
+        <div class="step"><div class="step-n">5</div><p>Meaning: If a patient tests positive, there is a 64.3% chance they actually have the disease. The other 35.7% are <em>false positives</em>.</p></div>
+      </div>
+    </div>
+
+    <div class="callout ds">
+      <span class="callout-icon">🤖</span>
+      <p><strong>ML Connection:</strong> Conditional probability is the backbone of Naive Bayes classifiers, Hidden Markov Models (HMMs for speech/text), and any probabilistic model. P(class | features) is exactly what classifiers are trying to estimate.</p>
+    </div>
+  </div>
+
+  <!-- 9.5 Independence vs Dependence -->
+  <div class="card green">
+    <h3>⚖️ 9.5 — Independence vs. Dependence</h3>
+
+    <p>Two events are <strong>independent</strong> if knowing that one occurred tells us <em>nothing</em> about whether the other will occur. Otherwise, they are <strong>dependent</strong>.</p>
+
+    <div class="formula">
+      <div class="label">Test for Independence</div>
+      Events A and B are <span class="hl">INDEPENDENT</span> if and only if:<br>
+      <span class="hl">P(A ∩ B) = P(A) × P(B)</span><br><br>
+      Equivalently: <span class="hl">P(A | B) = P(A)</span> &nbsp; [B gives no information about A]
+    </div>
+
+    <table class="tbl">
+      <tr>
+        <th>Aspect</th>
+        <th>Independent Events</th>
+        <th>Dependent Events</th>
+      </tr>
+      <tr>
+        <td>Definition</td>
+        <td>Outcome of one doesn't affect the other</td>
+        <td>Outcome of one changes probability of other</td>
+      </tr>
+      <tr>
+        <td>Formula</td>
+        <td>P(A∩B) = P(A) × P(B)</td>
+        <td>P(A∩B) = P(A) × P(B|A)</td>
+      </tr>
+      <tr>
+        <td>Example</td>
+        <td>Flipping coin twice; rolling two dice</td>
+        <td>Drawing cards without replacement</td>
+      </tr>
+      <tr>
+        <td>ML Use</td>
+        <td>Naive Bayes assumes features are independent</td>
+        <td>Bayesian Networks model dependencies between features</td>
+      </tr>
+    </table>
+
+    <div class="callout warn">
+      <span class="callout-icon">⚠️</span>
+      <p><strong>Important in ML:</strong> Naive Bayes classifier assumes all features are independent given the class label — which is rarely true in practice. Yet despite this "naive" assumption, it works remarkably well for text classification and spam detection. This is one of the most interesting paradoxes in applied ML.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 10 — COUNTING METHODS
+════════════════════════════════════════ -->
+<div class="section" id="counting">
+  <div class="section-header">
+    <span class="sec-tag indigo">§ 10</span>
+    <h2>Counting Methods</h2>
+  </div>
+
+  <!-- 10.1 Factorial -->
+  <div class="card teal">
+    <h3>! 10.1 — Factorial</h3>
+
+    <p>Before permutations and combinations, we need factorials. The <strong>factorial of n</strong> (written n!) is the product of all positive integers from 1 to n. It counts the number of ways to <em>arrange</em> n distinct items.</p>
+
+    <div class="formula">
+      <div class="label">Factorial Formula</div>
+      <span class="hl">n!</span> = n × (n−1) × (n−2) × ... × 2 × 1<br><br>
+      Special cases: &nbsp; <span class="hl">0! = 1</span> &nbsp;&nbsp; <span class="hl">1! = 1</span>
+    </div>
+
+    <div class="example">
+      <div class="ex-tag">📐 Quick Calculations</div>
+      <div class="data-line">
+        3! = 3×2×1 = 6<br>
+        5! = 5×4×3×2×1 = 120<br>
+        10! = 3,628,800<br>
+        0! = 1 (by definition — one way to arrange nothing)
+      </div>
+      <p><strong>Intuition:</strong> How many ways can 3 people (Alice, Bob, Carol) sit in a row? 3! = 6 arrangements: ABC, ACB, BAC, BCA, CAB, CBA.</p>
+    </div>
+  </div>
+
+  <!-- 10.2 Permutations -->
+  <div class="card amber">
+    <h3>🔢 10.2 — Permutations (Order Matters)</h3>
+
+    <p>A permutation counts the number of ways to <strong>select AND arrange r items from n items</strong> where <em>order matters</em>. Changing the order gives a different permutation.</p>
+
+    <p>Use permutations when: position matters (1st place vs 2nd place), order changes meaning (password "ABC" ≠ "BAC"), or you're arranging things in a sequence.</p>
+
+    <div class="formula">
+      <div class="label">Permutation Formula</div>
+      <span class="hl">P(n, r)</span> = n! / (n − r)!<br><br>
+      Where: n = total items available, r = items to arrange/select
+    </div>
+
+    <div class="example">
+      <div class="ex-tag">📐 Worked Example 1 — Race Positions</div>
+      <p>In a race with <strong>8 runners</strong>, how many ways can <strong>Gold, Silver, Bronze</strong> be awarded? (Order matters — Gold ≠ Silver)</p>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><p>n = 8 (total runners), r = 3 (positions to fill)</p></div>
+        <div class="step"><div class="step-n">2</div><p><strong>P(8, 3)</strong> = 8! / (8−3)! = 8! / 5! = (8×7×6×5!) / 5! = 8×7×6 = <strong>336</strong></p></div>
+        <div class="step"><div class="step-n">3</div><p>There are 336 possible ways to award the medals.</p></div>
+      </div>
+
+      <div class="ex-tag" style="margin-top:14px;">📐 Worked Example 2 — 4-Digit PIN</div>
+      <p>How many unique 4-digit PINs can be formed from digits 0–9 with <strong>no repetition</strong>?</p>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><p>n = 10 (digits 0–9), r = 4 (PIN length)</p></div>
+        <div class="step"><div class="step-n">2</div><p><strong>P(10, 4)</strong> = 10!/6! = 10×9×8×7 = <strong>5040 unique PINs</strong></p></div>
+      </div>
+    </div>
+
+    <div class="app-box">
+      <div class="app-tag">📊 Data Science Applications — Permutations</div>
+      <ul>
+        <li><strong>Password Strength:</strong> Security analysts compute permutations to estimate brute-force attack time. Longer passwords = exponentially more permutations.</li>
+        <li><strong>Feature Ordering:</strong> Testing all orderings of features in sequential feature selection uses permutations.</li>
+        <li><strong>Ranking Problems:</strong> Recommendation systems (Top-K lists) — how many distinct ranked lists of 5 movies exist from 1000 movies? P(1000, 5).</li>
+        <li><strong>Time Series:</strong> Permutation entropy measures complexity and randomness of time series data — used in anomaly detection.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 10.3 Combinations -->
+  <div class="card indigo">
+    <h3>🃏 10.3 — Combinations (Order Doesn't Matter)</h3>
+
+    <p>A combination counts the number of ways to <strong>select r items from n items</strong> where <em>order does NOT matter</em>. {A, B, C} is the same as {C, A, B} — it's the same group.</p>
+
+    <p>Use combinations when: selecting a team/group, choosing items from a set, order has no meaning, or you care about <em>what</em> is selected, not the <em>sequence</em>.</p>
+
+    <div class="formula">
+      <div class="label">Combination Formula</div>
+      <span class="hl">C(n, r)</span> = n! / [r! × (n − r)!] &nbsp;&nbsp; also written as <span class="hl">ⁿCᵣ</span> or <span class="hl">C(n,r)</span><br><br>
+      Relationship: &nbsp; <span class="hl-amber">C(n,r) = P(n,r) / r!</span> &nbsp; [divide by r! to remove order]
+    </div>
+
+    <div class="example">
+      <div class="ex-tag">📐 Worked Example 1 — Lottery</div>
+      <p>A lottery requires picking <strong>6 numbers from 1–49</strong>. How many combinations exist?</p>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><p>n = 49, r = 6 (order doesn't matter — {3,7,12} = {12,3,7})</p></div>
+        <div class="step"><div class="step-n">2</div><p><strong>C(49, 6)</strong> = 49! / (6! × 43!) = (49×48×47×46×45×44) / (6×5×4×3×2×1) = <strong>13,983,816</strong></p></div>
+        <div class="step"><div class="step-n">3</div><p>About 1 in 14 million chance to win. This is why lotteries are profitable!</p></div>
+      </div>
+
+      <div class="ex-tag" style="margin-top:14px;">📐 Worked Example 2 — ML Team Selection</div>
+      <p>You have 10 features. How many ways can you choose 3 features as a subset?</p>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><p><strong>C(10, 3)</strong> = 10! / (3! × 7!) = (10×9×8) / (3×2×1) = 720/6 = <strong>120 subsets</strong></p></div>
+        <div class="step"><div class="step-n">2</div><p>Brute-force feature selection with 10 features means testing 120 different 3-feature combinations.</p></div>
+      </div>
+    </div>
+
+    <!-- Permutation vs Combination Visual -->
+    <div class="chart-wrap">
+      <div class="chart-title">Permutation vs Combination — Key Difference</div>
+      <svg viewBox="0 0 620 160" width="100%" style="max-width:620px;">
+        <!-- Dividing line -->
+        <line x1="310" y1="10" x2="310" y2="150" stroke="#ddd8cf" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+        <!-- Left: Permutation -->
+        <text x="155" y="28" fill="#b5661f" font-family="Crimson Pro" font-size="14" text-anchor="middle" font-weight="700">Permutation — Order MATTERS</text>
+        <text x="155" y="45" fill="#5a534c" font-family="Nunito" font-size="11" text-anchor="middle">Selecting 2 from {A, B, C}</text>
+        <rect x="30"  y="55" width="80" height="30" rx="6" fill="rgba(181,102,31,0.15)" stroke="#b5661f" stroke-width="1.5"/>
+        <text x="70"  y="75" fill="#b5661f" font-family="JetBrains Mono" font-size="12" text-anchor="middle">A, B</text>
+        <rect x="118" y="55" width="80" height="30" rx="6" fill="rgba(181,102,31,0.15)" stroke="#b5661f" stroke-width="1.5"/>
+        <text x="158" y="75" fill="#b5661f" font-family="JetBrains Mono" font-size="12" text-anchor="middle">B, A</text>
+        <text x="155" y="102" fill="#8c837a" font-family="Nunito" font-size="10" text-anchor="middle">← These are DIFFERENT permutations</text>
+        <text x="155" y="118" fill="#b5661f" font-family="JetBrains Mono" font-size="11" text-anchor="middle">P(3,2) = 6 results</text>
+        <text x="155" y="135" fill="#5a534c" font-family="Nunito" font-size="10" text-anchor="middle">AB, BA, AC, CA, BC, CB</text>
+
+        <!-- Right: Combination -->
+        <text x="463" y="28" fill="#3d4fa0" font-family="Crimson Pro" font-size="14" text-anchor="middle" font-weight="700">Combination — Order SAME</text>
+        <text x="463" y="45" fill="#5a534c" font-family="Nunito" font-size="11" text-anchor="middle">Selecting 2 from {A, B, C}</text>
+        <rect x="338" y="55" width="80" height="30" rx="6" fill="rgba(61,79,160,0.12)" stroke="#3d4fa0" stroke-width="1.5"/>
+        <text x="378" y="75" fill="#3d4fa0" font-family="JetBrains Mono" font-size="12" text-anchor="middle">A, B</text>
+        <rect x="426" y="55" width="80" height="30" rx="6" fill="rgba(61,79,160,0.06)" stroke="#cbc5bb" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="466" y="75" fill="#cbc5bb" font-family="JetBrains Mono" font-size="12" text-anchor="middle">B, A</text>
+        <text x="463" y="102" fill="#8c837a" font-family="Nunito" font-size="10" text-anchor="middle">← These are the SAME combination</text>
+        <text x="463" y="118" fill="#3d4fa0" font-family="JetBrains Mono" font-size="11" text-anchor="middle">C(3,2) = 3 results</text>
+        <text x="463" y="135" fill="#5a534c" font-family="Nunito" font-size="10" text-anchor="middle">AB, AC, BC</text>
+      </svg>
+    </div>
+
+    <div class="app-box">
+      <div class="app-tag">📊 Data Science Applications — Combinations</div>
+      <ul>
+        <li><strong>Feature Selection:</strong> Exhaustive search through all C(n, k) feature subsets to find the best k features. With 20 features, C(20,5) = 15,504 subsets to test.</li>
+        <li><strong>Cross-Validation Splits:</strong> The number of ways to split data into train/test groups is a combination problem.</li>
+        <li><strong>Ensemble Methods:</strong> Bagging in Random Forests selects C(n, k) bootstrap samples. The diversity of combinations improves generalization.</li>
+        <li><strong>Hyperparameter Grid Search:</strong> Number of parameter combinations to test = product of choices. Combinatorial explosion motivates random search over grid search.</li>
+        <li><strong>NLP:</strong> n-gram counting uses combinations — C(n, 2) for bigrams tells you how many word pairs to track in a vocabulary.</li>
+      </ul>
+    </div>
+
+    <table class="tbl">
+      <tr>
+        <th>Aspect</th>
+        <th>Permutation P(n,r)</th>
+        <th>Combination C(n,r)</th>
+      </tr>
+      <tr><td>Order</td><td>Matters (AB ≠ BA)</td><td>Does not matter (AB = BA)</td></tr>
+      <tr><td>Formula</td><td>n! / (n−r)!</td><td>n! / [r!(n−r)!]</td></tr>
+      <tr><td>Count</td><td>Larger (more arrangements)</td><td>Smaller (P(n,r)/r!)</td></tr>
+      <tr><td>Keyword</td><td>Arrange, Rank, Order, Sequence</td><td>Choose, Select, Group, Team</td></tr>
+      <tr><td>Example</td><td>Passwords, rankings, medals</td><td>Lottery, team selection, subsets</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 11 — BAYES' THEOREM
+════════════════════════════════════════ -->
+<div class="section" id="bayes">
+  <div class="section-header">
+    <span class="sec-tag rose">§ 11</span>
+    <h2>Bayes' Theorem</h2>
+  </div>
+
+  <!-- 11.1 Understanding Bayes -->
+  <div class="card rose">
+    <h3>🧠 11.1 — Understanding Bayes' Theorem</h3>
+
+    <p>Bayes' Theorem tells us how to <strong>update our belief about a hypothesis when new evidence arrives</strong>. It combines what we already believe (prior) with what the data tells us (likelihood) to produce a refined belief (posterior).</p>
+
+    <p>Developed by Reverend Thomas Bayes (1763), it is arguably the most important theorem in modern machine learning and statistics.</p>
+
+    <div class="formula">
+      <div class="label">Bayes' Theorem</div>
+      <span class="hl">P(A | B)</span> = [ P(B | A) × P(A) ] / P(B)<br><br>
+      Expanded denominator: <span class="hl-amber">P(B)</span> = P(B|A)×P(A) + P(B|Aᶜ)×P(Aᶜ)<br><br>
+      <span class="hl-rose">Posterior</span> = [ <span class="hl">Likelihood</span> × <span class="hl-amber">Prior</span> ] / <span class="hl-rose">Evidence</span>
+    </div>
+
+    <!-- 11.2 Prior Likelihood Posterior -->
+    <h3 style="margin-top:20px; font-family:'Crimson Pro',serif; font-size:1.2rem;">11.2 — Prior, Likelihood, Posterior</h3>
+
+    <div class="bayes-flow">
+      <div class="bayes-box prior">
+        <div class="b-label">Step 1</div>
+        <div class="b-name">Prior P(A)</div>
+        <div class="b-sub">What you believe BEFORE seeing data.<br><em>"30% chance of rain today"</em></div>
+      </div>
+      <div class="arrow">×</div>
+      <div class="bayes-box likelihood">
+        <div class="b-label">Step 2</div>
+        <div class="b-name">Likelihood P(B|A)</div>
+        <div class="b-sub">How probable is this evidence if A is true.<br><em>"Clouds seen when it rains = 90%"</em></div>
+      </div>
+      <div class="arrow">÷</div>
+      <div class="bayes-box norm">
+        <div class="b-label">Step 3</div>
+        <div class="b-name">Evidence P(B)</div>
+        <div class="b-sub">Normalizing constant — total probability of observing B.</div>
+      </div>
+      <div class="arrow">=</div>
+      <div class="bayes-box posterior">
+        <div class="b-label">Result</div>
+        <div class="b-name">Posterior P(A|B)</div>
+        <div class="b-sub">Updated belief AFTER seeing data.<br><em>"Given clouds, P(rain) = 60%"</em></div>
+      </div>
+    </div>
+
+    <div class="example">
+      <div class="ex-tag">📐 Worked Example — Medical Test (Full Calculation)</div>
+      <p><strong>Setup:</strong> A disease affects 1% of the population. A test for it is 95% accurate.</p>
+      <div class="data-line">
+        P(Disease) = 0.01 &nbsp;&nbsp; → Prior: 1% have disease<br>
+        P(No Disease) = 0.99<br>
+        P(Test+ | Disease) = 0.95 &nbsp;&nbsp; → 95% true positive rate<br>
+        P(Test+ | No Disease) = 0.05 &nbsp; → 5% false positive rate
+      </div>
+      <p><strong>Question:</strong> You test positive. What is the actual probability you have the disease?</p>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><p><strong>Calculate P(Test+)</strong> [total probability of testing positive]:<br>
+          = P(Test+|Disease)×P(Disease) + P(Test+|No Disease)×P(No Disease)<br>
+          = (0.95 × 0.01) + (0.05 × 0.99)<br>
+          = 0.0095 + 0.0495 = <strong>0.059</strong></p></div>
+        <div class="step"><div class="step-n">2</div><p><strong>Apply Bayes' Theorem:</strong><br>
+          P(Disease | Test+) = P(Test+|Disease) × P(Disease) / P(Test+)<br>
+          = (0.95 × 0.01) / 0.059<br>
+          = 0.0095 / 0.059 = <strong>0.161 = 16.1%</strong></p></div>
+        <div class="step"><div class="step-n">3</div><p><strong>Interpretation:</strong> Even with a 95% accurate test, a positive result only means a <span class="hr-c">16.1% chance</span> of actually having the disease! Because the disease is rare (1%), most positives are false alarms.</p></div>
+        <div class="step"><div class="step-n">4</div><p>This is called the <strong>Base Rate Fallacy</strong> — ignoring how rare an event is. Doctors and diagnosticians must always account for base rates.</p></div>
+      </div>
+
+      <!-- Visual breakdown of the 1000 patients -->
+      <div class="chart-wrap" style="margin-top:14px;">
+        <div class="chart-title">Visual — Out of 1000 patients tested</div>
+        <svg viewBox="0 0 620 180" width="100%" style="max-width:620px;">
+          <!-- 1000 patients block -->
+          <rect x="20" y="10" width="580" height="50" rx="8" fill="rgba(93,116,182,0.12)" stroke="#3d4fa0" stroke-width="1.5"/>
+          <text x="310" y="32" fill="#3d4fa0" font-family="Nunito" font-size="12" text-anchor="middle" font-weight="700">1000 patients</text>
+          <text x="310" y="50" fill="#5a534c" font-family="Nunito" font-size="10" text-anchor="middle">Start: P(Disease) = 1% → expect 10 sick, 990 healthy</text>
+
+          <!-- Branch lines -->
+          <line x1="160" y1="60" x2="130" y2="90" stroke="#cbc5bb" stroke-width="1.5"/>
+          <line x1="450" y1="60" x2="490" y2="90" stroke="#cbc5bb" stroke-width="1.5"/>
+
+          <!-- 10 sick box -->
+          <rect x="30" y="90" width="200" height="44" rx="8" fill="rgba(160,48,80,0.12)" stroke="#a03050" stroke-width="1.5"/>
+          <text x="130" y="110" fill="#a03050" font-family="Nunito" font-size="11" text-anchor="middle" font-weight="700">10 SICK</text>
+          <text x="130" y="127" fill="#5a534c" font-family="Nunito" font-size="9.5" text-anchor="middle">True Pos: 9.5 ≈ 10 &nbsp;|&nbsp; False Neg: 0.5</text>
+
+          <!-- 990 healthy box -->
+          <rect x="390" y="90" width="210" height="44" rx="8" fill="rgba(42,127,114,0.12)" stroke="#2a7f72" stroke-width="1.5"/>
+          <text x="495" y="110" fill="#2a7f72" font-family="Nunito" font-size="11" text-anchor="middle" font-weight="700">990 HEALTHY</text>
+          <text x="495" y="127" fill="#5a534c" font-family="Nunito" font-size="9.5" text-anchor="middle">False Pos: 49.5 ≈ 50 &nbsp;|&nbsp; True Neg: 940</text>
+
+          <!-- Positive tests box -->
+          <line x1="130" y1="134" x2="220" y2="156" stroke="#cbc5bb" stroke-width="1.5"/>
+          <line x1="495" y1="134" x2="380" y2="156" stroke="#cbc5bb" stroke-width="1.5"/>
+          <rect x="160" y="156" width="290" height="18" rx="6" fill="rgba(181,102,31,0.15)" stroke="#b5661f" stroke-width="1.5"/>
+          <text x="305" y="170" fill="#b5661f" font-family="Nunito" font-size="10" text-anchor="middle" font-weight="700">Total Positive tests ≈ 60 &nbsp;|&nbsp; Only 10 are truly sick → 10/60 = 16.7%</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11.3 Applications -->
+  <div class="card green">
+    <h3>📧 11.3 — Application: Spam Detection</h3>
+
+    <p>This is one of the most famous real-world applications of Bayes' Theorem. We want to classify an email as spam or not spam based on the words it contains.</p>
+
+    <div class="formula">
+      <div class="label">Bayes for Spam Detection</div>
+      <span class="hl">P(Spam | "free")</span> = P("free" | Spam) × P(Spam) / P("free")<br><br>
+      We check for each word: given we see this word, does that raise or lower probability of spam?
+    </div>
+
+    <div class="example">
+      <div class="ex-tag">📐 Step-by-Step Spam Example</div>
+      <p><strong>Training data:</strong> 100 emails → 40 spam, 60 legitimate</p>
+      <div class="data-line">
+        Word "FREE" appears in 35 out of 40 spam emails<br>
+        Word "FREE" appears in 5 out of 60 legit emails
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><p><strong>Prior:</strong> P(Spam) = 40/100 = <strong>0.40</strong>, &nbsp; P(Legit) = 0.60</p></div>
+        <div class="step"><div class="step-n">2</div><p><strong>Likelihood:</strong> P("FREE" | Spam) = 35/40 = <strong>0.875</strong></p></div>
+        <div class="step"><div class="step-n">3</div><p><strong>Likelihood:</strong> P("FREE" | Legit) = 5/60 = <strong>0.083</strong></p></div>
+        <div class="step"><div class="step-n">4</div><p><strong>P("FREE")</strong> = (0.875×0.40) + (0.083×0.60) = 0.35 + 0.05 = <strong>0.40</strong></p></div>
+        <div class="step"><div class="step-n">5</div><p><strong>Posterior:</strong> P(Spam | "FREE") = (0.875 × 0.40) / 0.40 = <strong>0.875 = 87.5%</strong></p></div>
+        <div class="step"><div class="step-n">6</div><p>An email containing "FREE" has an 87.5% chance of being spam. The filter marks it accordingly.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11.4 Naive Bayes Classifier -->
+  <div class="card indigo">
+    <h3>🤖 11.4 — Naive Bayes Classifier</h3>
+
+    <p>Naive Bayes is a <strong>probabilistic ML classification algorithm</strong> built directly on Bayes' Theorem. It is called "naive" because it makes the <strong>simplifying assumption that all features are conditionally independent</strong> given the class — which is rarely true, but works well in practice.</p>
+
+    <div class="formula">
+      <div class="label">Naive Bayes — Full Classification Formula</div>
+      <span class="hl">P(Class | x₁, x₂, ..., xₙ)</span> ∝ P(Class) × ∏ P(xᵢ | Class)<br><br>
+      For each class: compute this score. Pick the class with the <span class="hl-amber">highest score</span>.<br><br>
+      The "naive" assumption: P(x₁,x₂,...xₙ|Class) = P(x₁|Class) × P(x₂|Class) × ... × P(xₙ|Class)
+    </div>
+
+    <div class="grid2">
+      <div class="mini-card">
+        <h4 class="indigo">Types of Naive Bayes</h4>
+        <p><strong>Gaussian NB:</strong> For continuous features (assumes normal distribution). Used in medical diagnosis.</p>
+        <p style="margin-top:6px;"><strong>Multinomial NB:</strong> For discrete counts (word counts in text). Best for document classification.</p>
+        <p style="margin-top:6px;"><strong>Bernoulli NB:</strong> For binary features (word present/absent). Good for short texts, spam filtering.</p>
+      </div>
+      <div class="mini-card">
+        <h4 class="teal">Strengths & Weaknesses</h4>
+        <p>✅ Extremely fast to train and predict<br>
+           ✅ Works great with small data<br>
+           ✅ Handles many features (high dimensional)<br>
+           ✅ Probabilistic output (confidence scores)<br>
+           ✅ Immune to irrelevant features</p>
+        <p style="margin-top:6px;">
+           ❌ Strong independence assumption<br>
+           ❌ Poor with correlated features<br>
+           ❌ Zero-frequency problem (use Laplace smoothing)
+        </p>
+      </div>
+    </div>
+
+    <div class="example">
+      <div class="ex-tag">📐 Worked Example — Weather & Play Cricket?</div>
+      <p><strong>Training Data (14 days):</strong> Sunny: 9 days, Rainy: 5 days | Played cricket on 9 days, Didn't on 5 days.</p>
+      <div class="data-line">
+        P(Play=Yes) = 9/14 = 0.643 &nbsp;&nbsp; P(Play=No) = 5/14 = 0.357<br>
+        P(Sunny | Play=Yes) = 6/9 = 0.667<br>
+        P(Sunny | Play=No) = 3/5 = 0.60<br>
+        P(Windy | Play=Yes) = 3/9 = 0.333<br>
+        P(Windy | Play=No) = 3/5 = 0.60
+      </div>
+      <p><strong>New Day:</strong> It's Sunny AND Windy. Will we play cricket?</p>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><p><strong>Score(Yes)</strong> = P(Yes) × P(Sunny|Yes) × P(Windy|Yes) = 0.643 × 0.667 × 0.333 = <strong>0.143</strong></p></div>
+        <div class="step"><div class="step-n">2</div><p><strong>Score(No)</strong> = P(No) × P(Sunny|No) × P(Windy|No) = 0.357 × 0.60 × 0.60 = <strong>0.128</strong></p></div>
+        <div class="step"><div class="step-n">3</div><p>Normalize: P(Yes) = 0.143/(0.143+0.128) = <strong>0.528</strong>, P(No) = 0.472</p></div>
+        <div class="step"><div class="step-n">4</div><p><strong>Prediction: Play = YES</strong> with 52.8% confidence. (It's a close call because of the wind!)</p></div>
+      </div>
+    </div>
+
+    <div class="app-box">
+      <div class="app-tag">📊 Real-World Applications of Naive Bayes</div>
+      <ul>
+        <li><strong>Spam/Ham Email Filtering:</strong> Gmail uses variants of Naive Bayes. Trained on millions of emails. Each word updates P(spam | this word).</li>
+        <li><strong>Sentiment Analysis:</strong> Classify product reviews as positive/negative/neutral based on word probabilities. Very fast for real-time applications.</li>
+        <li><strong>Medical Diagnosis:</strong> Given symptoms (features), compute P(disease | symptoms) for multiple diseases. Fast and interpretable — doctors can understand the probabilities.</li>
+        <li><strong>News Article Classification:</strong> Label news articles into categories (Sports, Tech, Politics). Multinomial NB is a strong baseline.</li>
+        <li><strong>Real-Time Recommendation:</strong> When speed matters more than accuracy. Naive Bayes can classify in microseconds — critical for ad click prediction at scale.</li>
+        <li><strong>Fraud Detection (initial pass):</strong> First layer filtering. Fast Naive Bayes flags suspicious transactions; heavier models (XGBoost) then do deeper analysis.</li>
+      </ul>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">📌</span>
+      <p><strong>Laplace Smoothing:</strong> If a word never appeared in training data, P(word|class) = 0, which zeroes out the entire product. Fix: add 1 to all counts → P(word|class) = (count + 1)/(total + vocab_size). This is called <strong>add-one (Laplace) smoothing</strong> and is standard in all Naive Bayes implementations.</p>
+    </div>
+
+    <table class="tbl">
+      <tr>
+        <th>Concept</th>
+        <th>Symbol</th>
+        <th>Meaning</th>
+        <th>In Spam Example</th>
+      </tr>
+      <tr><td>Prior</td><td>P(Class)</td><td>Base rate before seeing data</td><td>P(Spam) = 40% from training data</td></tr>
+      <tr><td>Likelihood</td><td>P(X|Class)</td><td>How probable is feature given class</td><td>P("FREE"|Spam) = 87.5%</td></tr>
+      <tr><td>Evidence</td><td>P(X)</td><td>Total probability of the feature</td><td>P("FREE") = weighted average</td></tr>
+      <tr><td>Posterior</td><td>P(Class|X)</td><td>Updated belief after seeing data</td><td>P(Spam|"FREE") = 87.5%</td></tr>
+      <tr><td>Decision</td><td>argmax</td><td>Choose class with highest posterior</td><td>Spam &gt; Ham → mark as Spam</td></tr>
+    </table>
+  </div>
+
+  <!-- Summary -->
+  <div class="card teal">
+    <h3>📋 Section Summary — Bayes' Big Picture</h3>
+    <p>Bayes' Theorem is not just a formula — it is a <strong>philosophy of reasoning under uncertainty</strong>. In classical (frequentist) statistics, probability is about long-run frequencies. In Bayesian statistics, probability represents <strong>degree of belief</strong> that gets updated as evidence accumulates.</p>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Bayesian Thinking — Belief Update Cycle</div>
+      <svg viewBox="0 0 600 100" width="100%" style="max-width:600px;">
+        <!-- Boxes -->
+        <rect x="10"  y="25" width="110" height="50" rx="10" fill="rgba(61,79,160,0.12)"  stroke="#3d4fa0" stroke-width="1.5"/>
+        <rect x="160" y="25" width="110" height="50" rx="10" fill="rgba(42,127,114,0.12)"  stroke="#2a7f72" stroke-width="1.5"/>
+        <rect x="310" y="25" width="110" height="50" rx="10" fill="rgba(181,102,31,0.12)"  stroke="#b5661f" stroke-width="1.5"/>
+        <rect x="460" y="25" width="130" height="50" rx="10" fill="rgba(160,48,80,0.12)"   stroke="#a03050" stroke-width="1.5"/>
+
+        <!-- Labels -->
+        <text x="65"  y="47" fill="#3d4fa0" font-family="Nunito" font-size="10.5" text-anchor="middle" font-weight="700">Prior Belief</text>
+        <text x="65"  y="63" fill="#5a534c" font-family="Nunito" font-size="9" text-anchor="middle">What I believe now</text>
+        <text x="215" y="47" fill="#2a7f72" font-family="Nunito" font-size="10.5" text-anchor="middle" font-weight="700">+ New Evidence</text>
+        <text x="215" y="63" fill="#5a534c" font-family="Nunito" font-size="9" text-anchor="middle">Data arrives</text>
+        <text x="365" y="47" fill="#b5661f" font-family="Nunito" font-size="10.5" text-anchor="middle" font-weight="700">× Likelihood</text>
+        <text x="365" y="63" fill="#5a534c" font-family="Nunito" font-size="9" text-anchor="middle">How probable?</text>
+        <text x="525" y="47" fill="#a03050" font-family="Nunito" font-size="10.5" text-anchor="middle" font-weight="700">= Posterior</text>
+        <text x="525" y="63" fill="#5a534c" font-family="Nunito" font-size="9" text-anchor="middle">Updated belief → new Prior</text>
+
+        <!-- Arrows -->
+        <text x="140" y="55" fill="#cbc5bb" font-family="Nunito" font-size="18" text-anchor="middle">→</text>
+        <text x="290" y="55" fill="#cbc5bb" font-family="Nunito" font-size="18" text-anchor="middle">→</text>
+        <text x="440" y="55" fill="#cbc5bb" font-family="Nunito" font-size="18" text-anchor="middle">→</text>
+
+        <!-- Loop back -->
+        <path d="M 590 75 Q 590 95 300 95 Q 10 95 10 75" fill="none" stroke="#ddd8cf" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="300" y="100" fill="#8c837a" font-family="Nunito" font-size="9" text-anchor="middle">Posterior becomes new Prior when more data arrives ↺</text>
+      </svg>
+    </div>
+
+    <div class="callout ds">
+      <span class="callout-icon">🤖</span>
+      <p><strong>Why Bayes' Theorem matters in AI:</strong> Modern AI systems like large language models, speech recognition, autonomous vehicles, and medical AI all use probabilistic reasoning rooted in Bayesian principles. When your phone's autocorrect suggests a word, when Netflix recommends a movie, or when a self-driving car decides whether an obstacle is real — they're all doing Bayesian-style inference: updating probability estimates based on incoming evidence.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Reference Table -->
+<div class="section">
+  <div class="section-header">
+    <span class="sec-tag green">SUMMARY</span>
+    <h2>Quick Reference — All Formulas</h2>
+  </div>
+  <div class="card teal">
+    <table class="tbl">
+      <tr>
+        <th>Topic</th>
+        <th>Formula</th>
+        <th>When to Use</th>
+        <th>Key Example</th>
+      </tr>
+      <tr><td>Basic Probability</td><td>P(A) = Favorable / Total</td><td>Equally likely outcomes</td><td>Coin, dice, cards</td></tr>
+      <tr><td>Complement Rule</td><td>P(Aᶜ) = 1 − P(A)</td><td>"NOT" problems; "at least one"</td><td>P(fail) = 1 − P(pass)</td></tr>
+      <tr><td>Addition Rule (OR)</td><td>P(A∪B) = P(A)+P(B)−P(A∩B)</td><td>Either event can happen</td><td>Heart OR King in cards</td></tr>
+      <tr><td>Multiplication (AND, dep)</td><td>P(A∩B) = P(A)×P(B|A)</td><td>Both events must happen, dependent</td><td>2 Aces without replacement</td></tr>
+      <tr><td>Multiplication (AND, indep)</td><td>P(A∩B) = P(A)×P(B)</td><td>Both events, independent</td><td>Two separate coin flips</td></tr>
+      <tr><td>Conditional Probability</td><td>P(A|B) = P(A∩B)/P(B)</td><td>Given B already happened</td><td>P(sick | test positive)</td></tr>
+      <tr><td>Factorial</td><td>n! = n×(n-1)×...×1</td><td>Count arrangements of all items</td><td>3 people in a line = 3! = 6</td></tr>
+      <tr><td>Permutations</td><td>P(n,r) = n!/(n-r)!</td><td>Ordered selection of r from n</td><td>Medal positions: P(8,3)=336</td></tr>
+      <tr><td>Combinations</td><td>C(n,r) = n!/[r!(n-r)!]</td><td>Unordered selection of r from n</td><td>Lottery 6/49: C(49,6)</td></tr>
+      <tr><td>Bayes' Theorem</td><td>P(A|B) = P(B|A)×P(A)/P(B)</td><td>Update belief with new evidence</td><td>Disease given positive test</td></tr>
+      <tr><td>Naive Bayes</td><td>P(C|x₁…xₙ) ∝ P(C)×∏P(xᵢ|C)</td><td>Probabilistic classification</td><td>Spam filtering, sentiment</td></tr>
+    </table>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  Probability &amp; Bayes' Theorem — Complete Study Guide &nbsp;|&nbsp;
+  Topics: Probability · Sample Space · Rules · Complement · Addition · Multiplication · Conditional · Counting · Permutations · Combinations · Bayes · Naive Bayes
+</footer>
+
+</body>
+</html>
